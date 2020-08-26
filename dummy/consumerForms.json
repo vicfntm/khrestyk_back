@@ -1,0 +1,19 @@
+{
+    "formData": [
+        {
+            "_id": "98345dkjgjnmb",
+            "email": "example@ex.com",
+            "message": "Availability request"
+        },
+        {
+            "_id": "983445454jgjnmb",
+            "email": "spammer@ex.com",
+            "message": "Spam! Spam! Spam!"
+        },
+        {
+            "_id": "98345dkjg5654mb",
+            "email": "frrehugs@spammer.com",
+            "message": "We all need more hugs, dude!"
+        }
+    ]
+}

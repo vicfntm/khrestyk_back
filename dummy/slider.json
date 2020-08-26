@@ -1,0 +1,42 @@
+{"images": [
+    {
+        "_id": "90384djffgldk5kjgf",
+        "title": "slider title",
+        "createdAt": "2020-03-23 10:23",
+        "updatedAt": "2020-08-22 12:00",
+        "image": 
+            {
+                "alt": "alternative description",
+                "_id": "90856d934f",
+                "url": "http://somesite.com/test/90856d934f.img"
+            }
+      
+      },
+      {
+        "_id": "90384djffgl4545kjgf",
+        "title": "slider title 2",
+        "createdAt": "2020-03-11 21:02",
+        "updatedAt": "2020-08-23 02:00",
+        "image": 
+            {
+                "alt": "alternative description 2",
+                "_id": "908as5kjf",
+                "url": "http://somesite.com/test/908as5kjf.img"
+            }
+      
+      },    
+      {
+        "_id": "90384ereffgldk5kjgf",
+        "title": "slider title 3",
+        "createdAt": "2020-03-11 03:23",
+        "updatedAt": "2020-08-05 11:00",
+        "image": 
+            {
+                "alt": "alternative description 3",
+                "_id": "90856ssddjf",
+                "url": "http://somesite.com/test/90856ssddjf.img"
+            }
+      
+      }
+    ]
+}

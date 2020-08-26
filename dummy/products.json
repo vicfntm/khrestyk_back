@@ -1,0 +1,77 @@
+
+{
+    "products": [
+  {
+      "description": "lorem",
+      "_id": "90384djffgl987kjgf",
+      "title": "title",
+      "price": 10.0,
+      "qty_available": 100,
+      "createdAt": "2020-03-23 10:23",
+      "updatedAt": "2020-08-22 12:00",
+      "category": "etno",
+      "images": [
+          {
+              "alt": "alternative description",
+              "is_main": true,
+              "_id": "90856dkjf",
+              "url": "http://somesite.com/test/90856dkjf.img"
+          },
+          {
+            "alt": "alternative description 2",
+            "is_main": false,
+            "_id": "458nkjhjhgfkj",
+            "url": "http://somesite.com/test/458nkjhjhgfkj.png"
+        }
+      ]  
+    },
+    {
+        "description": "second",
+        "_id": "90384djffgldjhfjgf",
+        "title": "title 2",
+        "price": 6.5,
+        "qty_available": 5,
+        "createdAt": "2020-03-23 10:24",
+        "updatedAt": "2020-08-11 23:22",
+        "category": "necklaces",
+        "images": [
+            {
+                "alt": "alternative description 2",
+                "is_main": true,
+                "_id": "90446dkjf",
+                "url": "http://somesite.com/test/90446dkjf.img"
+            },
+            {
+              "alt": "alternative description 5",
+              "is_main": false,
+              "_id": "458nkjh984fkj",
+              "url": "http://somesite.com/test/458nkjh984fkj.png"
+          }
+        ]  
+      },
+      {
+        "description": "third",
+        "_id": "90384djffgldj435gf",
+        "title": "title 3",
+        "price": 3.0,
+        "qty_available": 0,
+        "createdAt": "2020-03-23 10:24",
+        "updatedAt": "2020-08-21 11:00",
+        "category": "earrings",
+        "images": [
+            {
+                "alt": "alternative description 33",
+                "is_main": false,
+                "_id": "90446sbjf",
+                "url": "http://somesite.com/test/90446sbjf.img"
+            },
+            {
+              "alt": "alternative description 35",
+              "is_main": true,
+              "_id": "458nkj4fkj",
+              "url": "http://somesite.com/test/458nkj4fkj.png"
+          }
+        ]  
+      }
+    ]
+}

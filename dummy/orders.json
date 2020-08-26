@@ -1,0 +1,101 @@
+{
+    "orders": [
+        {
+            "_id": "90389flkml",
+            "createdAt": "2020-08-04 10:25:000",
+            "user_email": "foobarbaz@google.com",
+            "items": [
+                {
+                    "product_id": "90384djffgl987kjgf",
+                    "amount": 1,
+                    "price": 10.0,
+                    "description": "Lorem ipsum",
+                    "images":[
+                        {
+                            "alt": "alternative description",
+                            "is_main": true,
+                            "_id": "90856dkjf",
+                            "url": "base64 encoding"
+                        },
+                        {
+                          "alt": "alternative description 2",
+                          "is_main": false,
+                          "_id": "458nkjhjhgfkj",
+                          "url": "base64 encoding"
+                      }
+                    ] 
+                },
+                {
+                    "product_id": "90384djffgldjhfjgf",
+                    "amount": 2,
+                    "price": 6.5,
+                    "description": "Lorem ipsum",
+                    "images":[
+                        {
+                            "alt": "alternative description 2",
+                            "is_main": true,
+                            "_id": "90446dkjf",
+                            "url": "base64 encoding"
+                        },
+                        {
+                          "alt": "alternative description 5",
+                          "is_main": false,
+                          "_id": "458nkjh984fkj",
+                          "url": "base64 encoding"
+                      }
+                    ] 
+                }
+
+            ]
+            
+        },
+        {
+            "_id": "dflgkjg78iuf",
+            "user_email": "example@test.net",
+            "items": [
+                {
+                    "product_id": "90384djffgl987kjgf",
+                    "amount": 3,
+                    "price": 10.0,
+                    "description": "Lorem ipsum",
+                    "images":[
+                        {
+                            "alt": "alternative description",
+                            "is_main": true,
+                            "_id": "90856dkjf",
+                            "url": "base64 encoding"
+                        },
+                        {
+                          "alt": "alternative description 2",
+                          "is_main": false,
+                          "_id": "458nkjhjhgfkj",
+                          "url": "base64 encoding"
+                      }
+                    ] 
+                },
+                {
+                    "product_id": "90384djffgldj435gf",
+                    "amount": 2,
+                    "price": 3.0,
+                    "description": "Lorem ipsum",
+                    "images":[
+                        {
+                            "alt": "alternative description 2",
+                            "is_main": true,
+                            "_id": "90446sbjf",
+                            "url": "base64 encoding"
+                        },
+                        {
+                          "alt": "alternative description 5",
+                          "is_main": false,
+                          "_id": "90446sbjf",
+                          "url": "base64 encoding"
+                      }
+                    ] 
+                }
+
+            ]
+            
+        }
+    ]
+}

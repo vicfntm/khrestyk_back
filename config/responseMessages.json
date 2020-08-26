@@ -1,0 +1,15 @@
+{
+    "message": {
+        "edit": {
+            "success": "successfully edited"
+        },
+        "create": {
+            "success": "successfully created",
+            "fail": "creation failed"
+        },
+        "fail": {
+            "noData": "no data provided"
+        }
+    }
+   
+}
