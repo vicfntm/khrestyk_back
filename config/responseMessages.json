@@ -9,6 +9,10 @@
         },
         "fail": {
             "noData": "no data provided"
+        }, 
+        "show": {
+            "success": "ok",
+            "fail": "not found"
         }
     }
    

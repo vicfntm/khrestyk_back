@@ -3,7 +3,7 @@ const password = process.env.MONGO_PASSWORD;
 const host = process.env.MONGO_HOST;
 const db = process.env.MONGO_DB;
 const port = process.env.MONGO_PORT;
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectID} = require('mongodb');
 
 // Connection URL
 
@@ -26,6 +26,9 @@ exports.conn = async function connect(){
    //    client.close();
    // }
 
+}
+exports.objectId = () => {
+   return ObjectID
 }
 
 

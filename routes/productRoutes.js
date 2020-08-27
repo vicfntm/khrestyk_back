@@ -10,8 +10,8 @@ router.get('/all', async (req, res) => {
     res.json(await product.index())
 });
 
- router.get('/single/:id', (req, res) => {
-    res.json(product.create(req.params.id))
+ router.get('/single/:id', async(req, res) => {
+    res.json(await product.show(req.params.id))
  });
 
  router.patch('/edit/:id', (req, res) => {
@@ -23,7 +23,8 @@ router.get('/all', async (req, res) => {
  });
 
  router.post('/store-form-data', upload, async (req, res) => {
-   res.json(await product.storeForm(req))
+    const result = await product.storeForm(req);
+   res.status(result.code).json(result)
 });
 
 router.get('/', (req, res)=>{

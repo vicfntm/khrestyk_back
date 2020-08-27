@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     price: Number,
     qty_available: Number,
     createdAt: Date,

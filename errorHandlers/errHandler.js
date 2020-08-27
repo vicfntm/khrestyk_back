@@ -4,3 +4,7 @@ return function(req, res, next){
 }
 }
 
+exports.setServerCode = (fn) => {
+    
+}
+
