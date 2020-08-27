@@ -33,13 +33,13 @@ module.exports =  class ProductController extends BaseController {
 
     update(id){
 
-        return {status: `${this.messages.message.edit.success} with id: ${id}`}
+        return {message: `${this.messages.message.edit.success} with id: ${id}`}
     }
 
     async store(payload){
         const product = new this.productModel(payload)
             const savedProduct = await product.save()
-            return {message: this.messages.message.create.success, status: this.messages.message.create.success, data: savedProduct}
+            return {message: this.messages.message.create.success, data: savedProduct}
     }
 
     async storeForm(payload){
@@ -61,9 +61,9 @@ module.exports =  class ProductController extends BaseController {
         try{
             const product = new this.productModel(fullProduct)
             const savedProduct = await product.save() 
-            result = {status: this.messages.message.create.success, data: savedProduct, code: this.created}    
+            result = {message: this.messages.message.create.success, data: savedProduct, code: this.created}    
         }catch(err){
-            result = {status: this.messages.message.create.fail, err: err.message, code: this.unprocessable}
+            result = {message: this.messages.message.create.fail, err: err.message, code: this.unprocessable}
         }
         return result
 }
