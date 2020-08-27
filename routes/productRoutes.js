@@ -7,11 +7,13 @@ const product = new ProductController;
 const {catchErrors} = require('../errorHandlers/errHandler')
 const {upload} = require('../middlewares/fileUploader');
 router.get('/all', async (req, res) => {
-    res.json(await product.index())
+   const result = await product.index()
+   res.status(result.code).json(result)
 });
 
  router.get('/single/:id', async(req, res) => {
-    res.json(await product.show(req.params.id))
+   const result = await product.show(req.params.id)
+   res.status(result.code).json(result)
  });
 
  router.patch('/edit/:id', (req, res) => {

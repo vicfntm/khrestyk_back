@@ -13,18 +13,21 @@ module.exports =  class ProductController extends BaseController {
         
         const connection = (await this.connect).collection('products').find({})
         const c = await connection.toArray()
-        console.log(c)
         connection.close()
 
-        return c;
+        return {message: this.messages.message.index.success, code: this.accepted, data: c};
     }
 
     async show(id){
         try{
             const singleElem = await (await this.connect).collection('products').findOne({"_id": new ObjectID(id)})
-            return {message: this.messages.message.show.success, code: this.accepted, data: singleElem} 
+            if(singleElem){
+                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem} 
+            }else{
+                return {message: this.messages.message.show.fail, code: this.notFound, data: singleElem}
+            }
         }catch(err){
-            return  {message: this.messages.message.show.fail, err: err.message, code: this.notFound}
+            return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}
         }
     }
 
@@ -36,7 +39,7 @@ module.exports =  class ProductController extends BaseController {
     async store(payload){
         const product = new this.productModel(payload)
             const savedProduct = await product.save()
-            return {status: this.messages.message.create.success, data: savedProduct}
+            return {message: this.messages.message.create.success, status: this.messages.message.create.success, data: savedProduct}
     }
 
     async storeForm(payload){
@@ -60,7 +63,7 @@ module.exports =  class ProductController extends BaseController {
             const savedProduct = await product.save() 
             result = {status: this.messages.message.create.success, data: savedProduct, code: this.created}    
         }catch(err){
-            result = {status: this.messages.message.create.fail, err: err.message, code: this.unprocessabe}
+            result = {status: this.messages.message.create.fail, err: err.message, code: this.unprocessable}
         }
         return result
 }

@@ -5,9 +5,10 @@ exports.BaseController =  class BaseController {
         this.messages = require('../config/responseMessages.json')
         this.connect = conn();
         this.ObjectId = objectId
-        this.unprocessabe = 422;
+        this.unprocessable = 422;
         this.created = 201;
         this.notFound = 404;
         this.accepted = 202;
+        this.ok = 200;
     }
 }

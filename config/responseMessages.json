@@ -3,6 +3,10 @@
         "edit": {
             "success": "successfully edited"
         },
+        "index": {
+            "success": "ok",
+            "fail": "not found"
+        },
         "create": {
             "success": "successfully created",
             "fail": "creation failed"
@@ -12,7 +16,8 @@
         }, 
         "show": {
             "success": "ok",
-            "fail": "not found"
+            "fail": "not found",
+            "unprocessable": "unprocessable entity"
         }
     }
    
