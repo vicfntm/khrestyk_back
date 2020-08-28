@@ -1,0 +1,11 @@
+{
+    "swaggerDefinition": {
+        "basePath": "http://localhost:8085/api/",
+        "info": {
+            "title": "Shop-API",
+            "description": "Shop endpoints, standard requests & responses",
+            "servers": ["http://localhost:3000"]
+        }
+    }, 
+    "apis": ["server.js"]
+}

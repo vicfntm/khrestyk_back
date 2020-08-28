@@ -11,6 +11,7 @@
     "body-parser": "^1.19.0",
     "bs-logger": "^0.2.6",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
@@ -26,6 +27,8 @@
     "node-rsa": "^1.0.8",
     "nodemon": "^2.0.4",
     "sequelize": "^5.21.12",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-express": "^4.1.4",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
