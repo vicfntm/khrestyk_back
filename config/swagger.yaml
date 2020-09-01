@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  title: Khrestik API
+  description:  Find out how your APIs work.
+  version: 1.0.0
+# info:
+#     title: Khrestik API
+#     description: Find out how your APIs work.
+#     version: 1.0.0
+servers:
+    - url: http://localhost:8085/api/v1
+paths:
+    /product/all:
+        get:
+            summary: get all product data
+            tags:
+                - Products
+            responses:
+                '202':
+                    description: all products received successfully
+                    content:
+                        application:json:
+                            schema:
+                                $ref: '#/components/schemas/Product'
+                '500':
+                    description: server error
+    /product/single/{productId}:
+        get:
+            summary: get single product data
+            parameters:
+                - in: path
+                  name: productId
+                  schema:
+                    type: string
+                  required: true
+                  description: unique mongo id
+            tags:
+                - Products
+            responses:
+                '202':
+                    description: all products received successfully
+                    content:
+                        application:json:
+                            schema:
+                                $ref: '#/components/schemas/Product'
+                '404':
+                    description: id not found
+                '422':
+                    description: id probably incorrect
+                '500':
+                    description: server error 
+    /product/store-form-data:
+        post:
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                description:
+                                    type: string
+                                title:
+                                    type: string
+                                price:
+                                    type: number
+                                qty_available:
+                                    type: integer
+                                category:
+                                    type: string
+                                images: 
+                                    type: array
+                                    items:
+                                        type: object
+                                        additionalProperties:
+                                        $ref: '#/components/schemas/Image'
+
+                            required:
+                                - description
+                                - title
+                                - qty_available
+                                - category
+components:
+    schemas:
+        Product:
+            type: object
+            properties:
+                _id: 
+                    type: string
+                    required: true
+                description:
+                    type: string
+                    required: true
+                title:
+                    type: string
+                    required: true
+                isActive:
+                    type: boolean
+                    default: true
+                price: 
+                    type: number
+                qty_available:
+                    type: integer
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+                category:
+                    type: string
+                    required: true
+                images: 
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            alt:
+                                type: string
+                            url:
+                                type: string
+                            _id:
+                                type: string
+                            is_main:
+                                type: boolean
+        Image:
+            type: object
+            properties:
+                alt: 
+                    type: string
+                is_main: 
+                    type: boolean
+                url:
+                    type: string
+                file: 
+                    type: string

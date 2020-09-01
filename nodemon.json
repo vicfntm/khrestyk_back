@@ -1,4 +1,9 @@
 {
   "verbose": true,
-  "watch": ["./server.js", "dbConnections/", "migrations/", "models/", "controllers/", "middlewares/", "controllers", "routes/", "models/mongoModels/", "middlewares/modificators/dictionaryModificators", "schedules/", "subscribers/"]
+  "watch": [
+    "./server.js", "dbConnections/", "migrations/", "models/", 
+    "controllers/", "middlewares/", "controllers", "routes/", 
+    "models/mongoModels/", "middlewares/modificators/dictionaryModificators", 
+    "schedules/", "subscribers/", "config/*.*"
+  ]
 }

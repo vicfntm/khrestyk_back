@@ -12,17 +12,31 @@ module.exports =  class ProductController extends BaseController {
     async index () {
         
         const connection = (await this.connect).collection('products').find({})
-        const c = await connection.toArray()
+        const products = await connection.toArray()
         connection.close()
+        const categories = this.getUniqueCategories(products)
+        return {message: this.messages.message.index.success, code: this.accepted, data: {products, categories: [...categories]}};
+    }
 
-        return {message: this.messages.message.index.success, code: this.accepted, data: c};
+    getUniqueCategories(products){
+        const categories = new Set();
+        products.map(item => {
+            if(item.category !== undefined){
+                categories.add(item.category)
+         }} ) 
+         return categories
+
     }
 
     async show(id){
         try{
-            const singleElem = await (await this.connect).collection('products').findOne({"_id": new ObjectID(id)})
+            const connection = (await this.connect).collection('products').find({})
+            const products = await connection.toArray()
+            const singleElem =  products.find(i => i._id == id)
+            connection.close()
+            const categories = this.getUniqueCategories(products)
             if(singleElem){
-                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem} 
+                return {message: this.messages.message.show.success, code: this.accepted, data: {products, categories: [...categories]}} 
             }else{
                 return {message: this.messages.message.show.fail, code: this.notFound, data: singleElem}
             }
@@ -31,9 +45,36 @@ module.exports =  class ProductController extends BaseController {
         }
     }
 
-    update(id){
+    async update(req){
+        
+        try{
+        // get images if exists
+        if(req.files.length > 0){
+            const images = req.files.map((item, key)=>{
+                // console.log(item)
+            })
+            // console.log(req.body.images)
+            delete req.body.images
+        }
+        // operate w string keys
+        let singleElem;
+        if(Object.keys(req.body).length > 0){
+            singleElem = await (await this.connect).collection('products').findOneAndUpdate(
+                {"_id": new ObjectID(req.params.id)},
+                {$set: {...req.body, ...{'updatedAt': new Date()}}, $inc: {__v: 1}},
+                { upsert: false})
+        }
 
-        return {message: `${this.messages.message.edit.success} with id: ${id}`}
+        if(singleElem){ 
+            
+                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem.value} 
+            }else{
+                return {message: this.messages.message.show.fail, code: this.notFound, data: undefined}
+            }
+        }catch(err){
+            return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}
+        }
+        // return {message: `${this.messages.message.edit.success} with id: ${id}`}
     }
 
     async store(payload){

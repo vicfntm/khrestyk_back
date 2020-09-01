@@ -1,11 +1,208 @@
 {
-    "swaggerDefinition": {
-        "basePath": "http://localhost:8085/api/",
-        "info": {
-            "title": "Shop-API",
-            "description": "Shop endpoints, standard requests & responses",
-            "servers": ["http://localhost:3000"]
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Khrestik API",
+      "description": "Find out how your APIs work",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:8085",
+    "basePath": "/api/v1",
+    "tags": [
+      {
+        "name": "Products",
+        "description": "API for crud operations"
+      }
+
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json",
+      "multipart/form-data"
+    ],
+    "securityDefinitions": {
+        "ApiKeyAuth":{
+          "type": "apiKey",
+          "in": "headers",
+          "name": "authorization"
         }
-    }, 
-    "apis": ["server.js"]
+    },
+    "paths": {
+      "/product/all": {
+        "get": {
+          "summary": "get all product data",
+          "tags": [
+            "Products"
+          ],
+          "description": "get data",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "202": {
+              "description": "success response",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            },
+            "500":{
+              "description": "Server error"
+            }
+          }
+        }
+      },
+      "/product/single/{productId}": {
+        "get": {
+          "summary": "get single product data",
+          "tags": [
+            "Products"
+          ],
+          "parameters": [
+            {
+              "name": "productId",
+              "in": "path",
+              "description": "product id",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          ],
+          "description": "get data",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "202": {
+              "description": "success response",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            },
+            "404":{
+              "description": "product not found"
+            },
+            "422":{
+              "description": "unprocessable"
+            },
+            "500":{
+              "description": "server error"
+            }
+          }
+        }
+      },
+      "/product/store-form-data": {
+        "post": {
+          "summary": "create new product",
+          "tags": [
+            "Products"
+          ],
+          "requestBody": {
+            "required": "true",
+            "content" : {
+                "multipart/formdata": {
+                    "schema": {
+                        "type": "object",
+                        "properties": [
+                            {"title": {
+                                "type": "string"
+                            }
+                        }
+                        ]
+                    }
+                }
+            }
+          },
+          "description": "create data",
+          "produces": [
+            "multipart/formdata"
+          ],
+          "responses": {
+            "202": {
+              "description": "success response",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            },
+            "404":{
+              "description": "product not found"
+            },
+            "422":{
+              "description": "unprocessable"
+            },
+            "500":{
+              "description": "server error"
+            }
+          }
+        }
+      }
+    },
+
+    "definitions": {
+
+      "Product": {
+          "properties": {
+              "_id": {
+                  "type" :"string"
+              },
+            "description": {
+                "type": "string",
+                "required": true
+                },
+                "title": {
+                    "type": "string",
+                    "required": true
+                },
+                "isActive": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "price": {
+                    "type": "number"
+                },
+                "qty_available": {
+                    "type" : "number"
+                },
+                "createdAt":{
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string",
+                    "required": true
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type":"string"
+                            },
+                            "alt": {
+                                "type":"string"
+                            },
+                            "is_main": {
+                                "type":"boolean"
+                        }
+                    }
+                }
+          }
+        
+      }
+    }
 }
+
+
+
+    }
+  

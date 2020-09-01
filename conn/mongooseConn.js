@@ -12,7 +12,7 @@ console.log('URL: ', url);
 const shortUrl = `mongodb://${host}:${port}/${db}?authSource=admin`;
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
-mongoose.connect(url, { useNewUrlParser: true})
+mongoose.connect(url, { useNewUrlParser: true, useFindAndModify: false})
     .then(() => {
         console.log('successfully connected to the database');
     }).catch(err => {

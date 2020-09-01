@@ -6,6 +6,7 @@ const ProductController = require('../controllers/productController')
 const product = new ProductController;
 const {catchErrors} = require('../errorHandlers/errHandler')
 const {upload} = require('../middlewares/fileUploader');
+
 router.get('/all', async (req, res) => {
    const result = await product.index()
    res.status(result.code).json(result)
@@ -16,8 +17,9 @@ router.get('/all', async (req, res) => {
    res.status(result.code).json(result)
  });
 
- router.patch('/edit/:id', (req, res) => {
-    res.json(product.update(req.params.id));
+ router.patch('/edit/:id', async (req, res) => {
+    const result = await product.update(req)
+    res.status(result.code).json(result);
  });
 
  router.post('/store',  async (req, res) => {
