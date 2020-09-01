@@ -20,8 +20,13 @@ paths:
                     description: all products received successfully
                     content:
                         application:json:
-                            schema:
-                                $ref: '#/components/schemas/Product'
+                            properties:
+                                products:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                                categories:
+                                    schema:
+                                        $ref: '#/components/schemas/Categories'
                 '500':
                     description: server error
     /product/single/{productId}:
@@ -41,8 +46,13 @@ paths:
                     description: all products received successfully
                     content:
                         application:json:
-                            schema:
-                                $ref: '#/components/schemas/Product'
+                            properties:
+                                product:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                                categories:
+                                    schema:
+                                        $ref: '#/components/schemas/Categories'
                 '404':
                     description: id not found
                 '422':
@@ -131,3 +141,7 @@ components:
                     type: string
                 file: 
                     type: string
+        Categories:
+            type: array
+            items:
+                type: string
