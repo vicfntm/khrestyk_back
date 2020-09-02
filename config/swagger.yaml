@@ -9,6 +9,7 @@ info:
 #     version: 1.0.0
 servers:
     - url: http://localhost:8085/api/v1
+    - url: http://95.179.185.226:8085/api/v1
 paths:
     /product/all:
         get:
