@@ -84,7 +84,6 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async storeForm(payload){
-        
         const files = payload.files;
         let fullProduct = payload.body;
         let result;
@@ -101,7 +100,8 @@ module.exports =  class ProductController extends BaseController {
         }
         try{
             const product = new this.productModel(fullProduct)
-            const savedProduct = await product.save() 
+            const savedProduct = await product.save()
+            
             result = {message: this.messages.message.create.success, data: savedProduct, code: this.created}    
         }catch(err){
             result = {message: this.messages.message.create.fail, err: err.message, code: this.unprocessable}

@@ -9,6 +9,7 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./config/swagger.yaml');
 app.use(bodyParser.json());
 const multer = require('multer')()
+require('./conn/mongooseConn');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static('./storage/public'));
@@ -17,8 +18,7 @@ const productRoutes = require('./routes/productRoutes');
 const sliderRoutes = require('./routes/sliderRoutes');
 const formRoutes = require('./routes/consumerFormRoutes');
 // const handlers = require('./errorHandlers/errHandler')
-// require('./conn/mongooseConn');
-app.use('/api/v1/product', multer.any('images', 50), productRoutes);
+app.use('/api/v1/product', productRoutes);
 app.use('/api/v1/slider', sliderRoutes);
 app.use('/api/v1/admin/consumer-form', formRoutes);
 app.get('/', (req, res) => {
