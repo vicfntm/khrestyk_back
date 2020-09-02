@@ -1,7 +1,7 @@
 const express = require('express');
 var cors = require('cors');
 const app = express();
-app.use(cors({origin: '*'}));
+app.use(cors({origin: '*', credentials: true}));
 const bodyParser = require('body-parser');
 require('dotenv').config({path:'variables.env'});
 const swaggerUi = require('swagger-ui-express');
