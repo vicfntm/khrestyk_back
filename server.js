@@ -1,5 +1,6 @@
 const express = require('express');
 var cors = require('cors');
+app.use(cors({origin: '*'}));
 const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config({path:'variables.env'});
@@ -17,7 +18,7 @@ const sliderRoutes = require('./routes/sliderRoutes');
 const formRoutes = require('./routes/consumerFormRoutes');
 // const handlers = require('./errorHandlers/errHandler')
 // require('./conn/mongooseConn');
-app.use('/api/v1/product', cors(), multer.any('images', 50), productRoutes);
+app.use('/api/v1/product', multer.any('images', 50), productRoutes);
 app.use('/api/v1/slider', sliderRoutes);
 app.use('/api/v1/admin/consumer-form', formRoutes);
 app.get('/', (req, res) => {
