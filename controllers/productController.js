@@ -36,9 +36,10 @@ module.exports =  class ProductController extends BaseController {
             connection.close()
             const categories = this.getUniqueCategories(products)
             if(singleElem){
-                return {message: this.messages.message.show.success, code: this.accepted, data: {products, categories: [...categories]}} 
+                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem}
             }else{
-                return {message: this.messages.message.show.fail, code: this.notFound, data: singleElem}
+                return {message: this.messages.message.show.fail, code: this.notFound, data: {products, categories: [...categories]}} 
+
             }
         }catch(err){
             return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}
@@ -48,16 +49,19 @@ module.exports =  class ProductController extends BaseController {
     async update(req){
         
         try{
-        // get images if exists
+            let images;
         if(req.files.length > 0){
-            const images = req.files.map((item, key)=>{
-                // console.log(item)
-            })
-            // console.log(req.body.images)
-            delete req.body.images
+            images = req.files.map((file, i) => {
+                const alt = req.body.images[i].alt ? req.body.images[i].alt : undefined
+                const url = this.urlHandler(file.path) ? this.urlHandler(file.path) : undefined
+                const isMain = req.body.images[i].is_main ? req.body.images[i].is_main : undefined
+                const core = {}
+                if(alt) core.alt = alt
+                if(url) core.url = url
+                if(isMain) core.is_main = isMain
+                return core
+            }) 
         }
-        // operate w string keys
-        let singleElem;
         if(Object.keys(req.body).length > 0){
             singleElem = await (await this.connect).collection('products').findOneAndUpdate(
                 {"_id": new ObjectID(req.params.id)},
@@ -74,7 +78,6 @@ module.exports =  class ProductController extends BaseController {
         }catch(err){
             return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}
         }
-        // return {message: `${this.messages.message.edit.success} with id: ${id}`}
     }
 
     async store(payload){

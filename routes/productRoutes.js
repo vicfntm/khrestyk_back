@@ -17,7 +17,7 @@ router.get('/all', async (req, res) => {
    res.status(result.code).json(result)
  });
 
- router.patch('/edit/:id', async (req, res) => {
+ router.patch('/edit/:id', upload, async (req, res) => {
     const result = await product.update(req)
     res.status(result.code).json(result);
  });
