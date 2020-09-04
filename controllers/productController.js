@@ -36,32 +36,42 @@ module.exports =  class ProductController extends BaseController {
             connection.close()
             const categories = this.getUniqueCategories(products)
             if(singleElem){
-                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem}
+                return {message: this.messages.message.show.success, code: this.accepted, data: {product: singleElem, categories: [...categories]}}
             }else{
-                return {message: this.messages.message.show.fail, code: this.notFound, data: {products, categories: [...categories]}} 
-
+                return {message: this.messages.message.show.fail, code: this.notFound, data: null }
             }
         }catch(err){
             return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}
         }
     }
 
+    defineProperty(target, param){
+        return target.hasOwnProperty(param) ? target[param] : undefined
+    }
+
     async update(req){
         
         try{
-            let images;
+            let images,
+                singleElem;
         if(req.files.length > 0){
             images = req.files.map((file, i) => {
-                const alt = req.body.images[i].alt ? req.body.images[i].alt : undefined
+                const imgs = {...req.body.images[i]}
+                const alt = this.defineProperty(imgs, 'alt')
                 const url = this.urlHandler(file.path) ? this.urlHandler(file.path) : undefined
-                const isMain = req.body.images[i].is_main ? req.body.images[i].is_main : undefined
+                const isMain = this.defineProperty(imgs, 'is_main')
+                const _id = this.defineProperty(imgs, '_id')
                 const core = {}
                 if(alt) core.alt = alt
                 if(url) core.url = url
                 if(isMain) core.is_main = isMain
+                if(_id) core._id = _id
                 return core
             }) 
+            req.body.images = images;
+            
         }
+        console.log('UPD BODY', req.body)
         if(Object.keys(req.body).length > 0){
             singleElem = await (await this.connect).collection('products').findOneAndUpdate(
                 {"_id": new ObjectID(req.params.id)},
@@ -70,10 +80,10 @@ module.exports =  class ProductController extends BaseController {
         }
 
         if(singleElem){ 
-            
+            console.log(singleElem)
                 return {message: this.messages.message.show.success, code: this.accepted, data: singleElem.value} 
             }else{
-                return {message: this.messages.message.show.fail, code: this.notFound, data: undefined}
+                return {message: this.messages.message.show.fail, code: this.notFound, data: null}
             }
         }catch(err){
             return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}

@@ -10,7 +10,7 @@ const swaggerDocument = YAML.load('./config/swagger.yaml');
 app.use(bodyParser.json());
 const multer = require('multer')()
 require('./conn/mongooseConn');
-
+app.use(express.urlencoded({extended: true}))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static('./storage/public'));
 
