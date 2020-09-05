@@ -1,6 +1,7 @@
 
 const {BaseController} = require('./baseController')
 const {ObjectID} = require('mongodb')
+// const { delete } = require('../routes/sliderRoutes')
 module.exports =  class ProductController extends BaseController {
 
     constructor(){
@@ -68,19 +69,37 @@ module.exports =  class ProductController extends BaseController {
                 if(_id) core._id = _id
                 return core
             }) 
-            req.body.images = images;
-            
+            delete req.body.images
+
         }
-        console.log('UPD BODY', req.body)
-        if(Object.keys(req.body).length > 0){
-            singleElem = await (await this.connect).collection('products').findOneAndUpdate(
-                {"_id": new ObjectID(req.params.id)},
-                {$set: {...req.body, ...{'updatedAt': new Date()}}, $inc: {__v: 1}},
-                { upsert: false})
+        if(images.length !== 0){
+            const oldImg = images.filter(i => i.hasOwnProperty('_id')).map(async a => {
+                await (await this.connect).collection('products').findOneAndUpdate(
+                    {'images._id': a._id},
+                    {$set: {'images.$': a},
+                     $inc: {__v: 1}
+                    },
+                    { upsert: false})
+            })
+            const mewImg = images.filter(i => !i.hasOwnProperty('_id')).map(async b => {
+                await (await this.connect).collection('products').findOneAndUpdate(
+                    {"_id": new ObjectID(req.params.id)},
+                    {$push: {'images': {...b, ...{_id: new ObjectID()}}},
+                     $inc: {__v: 1}
+                    },
+                    { upsert: false})
+            })
+            if(Object.keys(req.body).length > 0){
+                singleElem = await (await this.connect).collection('products').findOneAndUpdate(
+                    {"_id": new ObjectID(req.params.id)},
+                    {$set: {...req.body, ...{'updatedAt': new Date()}}, $inc: {__v: 1}},
+                    { upsert: false})
+            }
+
         }
 
+
         if(singleElem){ 
-            console.log(singleElem)
                 return {message: this.messages.message.show.success, code: this.accepted, data: singleElem.value} 
             }else{
                 return {message: this.messages.message.show.fail, code: this.notFound, data: null}
