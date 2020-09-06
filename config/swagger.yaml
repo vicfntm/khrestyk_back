@@ -13,6 +13,7 @@ servers:
 paths:
     /product/all:
         get:
+            description: "отримання усіх продуктів. задокументованими є 2 типи помилок: 500 - помилка сервера та 202 - дані успішно передано клієнту"
             summary: get all product data
             tags:
                 - Products
@@ -32,6 +33,7 @@ paths:
                     description: server error
     /product/single/{productId}:
         get:
+            description: "отримання одного конкретного продукту на основі переданого _id."
             summary: get single product data
             parameters:
                 - in: path
@@ -62,15 +64,19 @@ paths:
                     description: server error 
     /product/store-form-data:
         post:
+            description: "застосовується для збереження даних про окремі продукти. параметр images містить опис зображень продукту, та може містити до 50 зображень, переданих із вказанням індексу: images[0], images[1], ..., images[n(max 50)] виключно 2 параметри є обов'язковими: title та description . Продукт надсилається у вигляді FormData"
             requestBody:
                 content:
                     multipart/form-data:
                         schema:
                             type: object
                             properties:
-                                description:
-                                    type: string
+                                isActive:
+                                    type: boolean
+                                    default: true
                                 title:
+                                    type: string
+                                description:
                                     type: string
                                 price:
                                     type: number
@@ -78,18 +84,106 @@ paths:
                                     type: integer
                                 category:
                                     type: string
-                                images: 
-                                    type: array
-                                    items:
-                                        type: object
-                                        additionalProperties:
-                                        $ref: '#/components/schemas/Image'
-
+                                images[0][alt]:
+                                    type: string
+                                images[0][is_main]:
+                                    type: boolean
+                                    default: true
+                                images[0]:
+                                    type: file
+                                images[1][alt]:
+                                    type: string
+                                images[1][is_main]:
+                                    type: boolean
+                                    default: true
+                                images[1]:
+                                    type: file
                             required:
                                 - description
                                 - title
-                                - qty_available
-                                - category
+            responses:
+                '201':
+                    description: created product
+                    content:
+                        application:json:
+                            properties:
+                                product:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                                categories:
+                                    schema:
+                                        $ref: '#/components/schemas/Categories'
+                '422':
+                    description: incorrect data params passed
+                '500':
+                    description: server error 
+    /product/edit/{product_id}:
+        patch:
+            description: "редагування уже існуючого продукту, а також додавання чи зміна даних супутніх зображень: alt, is_main. Для редагування іcнуючого зображення обов'язковим є передача параметра _id цього зображення. Інакше за відсутності параметру _id зображення буде розцінене як цілком нове і буде додано до масиву значень"
+            parameters:
+                -  in: path
+                   name: product_id
+                   schema:
+                    type: string
+                    required: true
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                isActive:
+                                    type: boolean
+                                    default: true
+                                title:
+                                    type: string
+                                description:
+                                    type: string
+                                price:
+                                    type: number
+                                qty_available:
+                                    type: integer
+                                category:
+                                    type: string
+                                images[0][_id]:
+                                    type: string
+                                images[0][alt]:
+                                    type: string
+                                images[0][is_main]:
+                                    type: boolean
+                                    default: true
+                                images[0]:
+                                    type: file
+                                images[1][_id]:
+                                    type: string
+                                images[1][alt]:
+                                    type: string
+                                images[1][is_main]:
+                                    type: boolean
+                                    default: true
+                                images[1]:
+                                    type: file
+                                
+            responses:
+                '202':
+                    description: успішно відредаговано
+                    content:
+                        application:json:
+                            properties:
+                                product:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                                categories:
+                                    schema:
+                                        $ref: '#/components/schemas/Categories'
+                '404':
+                    description: продукт не знайдено
+                '422':
+                    description: 'дані передано некоректно, або дані відсутні (за умови err: Cannot read property length of undefined")'
+                '500':
+                    description: server error 
+
+
 components:
     schemas:
         Product:

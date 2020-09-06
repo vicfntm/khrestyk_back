@@ -1,6 +1,7 @@
 
 const {BaseController} = require('./baseController')
 const {ObjectID} = require('mongodb')
+const { prototype } = require('node-rsa')
 // const { delete } = require('../routes/sliderRoutes')
 module.exports =  class ProductController extends BaseController {
 
@@ -51,12 +52,16 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async update(req){
-        
+        const requestToObjectCast = {...req.body}
+        const fileData = [...req.files]
+        Object.keys(requestToObjectCast).forEach( key => requestToObjectCast[key] === '' && delete requestToObjectCast[key])
+        fileData.forEach( (val, key) => fileData[key] === '' && delete fileData[key])
+
         try{
             let images,
                 singleElem;
-        if(req.files.length > 0){
-            images = req.files.map((file, i) => {
+        if(fileData.length > 0){
+            images = fileData.map((file, i) => {
                 const imgs = {...req.body.images[i]}
                 const alt = this.defineProperty(imgs, 'alt')
                 const url = this.urlHandler(file.path) ? this.urlHandler(file.path) : undefined
@@ -69,34 +74,34 @@ module.exports =  class ProductController extends BaseController {
                 if(_id) core._id = _id
                 return core
             }) 
-            delete req.body.images
+            
 
         }
-        if(images.length !== 0){
-            const oldImg = images.filter(i => i.hasOwnProperty('_id')).map(async a => {
+        if(images !== undefined && images.length !== 0){
+            images.filter(i => i.hasOwnProperty('_id')).map(async a => {
+                console.table(a)
                 await (await this.connect).collection('products').findOneAndUpdate(
-                    {'images._id': a._id},
+                    {'images._id': new ObjectID(a._id)},
                     {$set: {'images.$': a},
                      $inc: {__v: 1}
                     },
-                    { upsert: false})
+                    { upsert: false, returnOriginal: false})
             })
-            const mewImg = images.filter(i => !i.hasOwnProperty('_id')).map(async b => {
+            images.filter(i => !i.hasOwnProperty('_id')).map(async b => {
                 await (await this.connect).collection('products').findOneAndUpdate(
                     {"_id": new ObjectID(req.params.id)},
                     {$push: {'images': {...b, ...{_id: new ObjectID()}}},
                      $inc: {__v: 1}
                     },
-                    { upsert: false})
+                    { upsert: false, returnOriginal: false})
             })
-            if(Object.keys(req.body).length > 0){
-                singleElem = await (await this.connect).collection('products').findOneAndUpdate(
-                    {"_id": new ObjectID(req.params.id)},
-                    {$set: {...req.body, ...{'updatedAt': new Date()}}, $inc: {__v: 1}},
-                    { upsert: false})
-            }
-
         }
+        delete requestToObjectCast.images
+        
+            singleElem = await (await this.connect).collection('products').findOneAndUpdate(
+                {"_id": new ObjectID(req.params.id)},
+                {$set: {...requestToObjectCast, ...{'updatedAt': new Date()}}, $inc: {__v: 1}},
+                { upsert: false, returnOriginal: false})
 
 
         if(singleElem){ 
@@ -117,7 +122,9 @@ module.exports =  class ProductController extends BaseController {
 
     async storeForm(payload){
         const files = payload.files;
+        console.log(files)
         let fullProduct = payload.body;
+        console.log(fullProduct)
         let result;
         if(files.length > 0){
           const images = files.map((file, i) => {
