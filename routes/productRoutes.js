@@ -31,6 +31,16 @@ router.get('/all', async (req, res) => {
    res.status(result.code).json(result)
 });
 
+router.delete('/image/:id', async(req, res) => {
+   const result = await product.removeImage(req.params.id)
+   res.status(result.code).json(result);
+})
+
+router.delete('/document/:id', async(req, res) => {
+   const result = await product.removeDocument(req.params.id)
+   res.status(result.code).json(result);
+})
+
 router.get('/', (req, res)=>{
     res.send('product')
  });

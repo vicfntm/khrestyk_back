@@ -3,6 +3,7 @@ const {BaseController} = require('./baseController')
 const {ObjectID} = require('mongodb')
 const { prototype } = require('node-rsa')
 // const { delete } = require('../routes/sliderRoutes')
+const fs = require('fs')
 module.exports =  class ProductController extends BaseController {
 
     constructor(){
@@ -122,9 +123,7 @@ module.exports =  class ProductController extends BaseController {
 
     async storeForm(payload){
         const files = payload.files;
-        console.log(files)
         let fullProduct = payload.body;
-        console.log(fullProduct)
         let result;
         if(files.length > 0){
           const images = files.map((file, i) => {
@@ -148,7 +147,52 @@ module.exports =  class ProductController extends BaseController {
         return result
 }
 
+    async removeImage(id){
+        const dataObj = await(await this.connect).collection('products').aggregate([
+            {$match: {
+                'images._id': ObjectID(id)
+            }},
+            {$unwind: '$images'},
+            {$match: {
+                'images._id': ObjectID(id)
+            }
+        }
+        ]).toArray()
+        if(Object.keys(dataObj).length !== 0){
+            const url = dataObj[0].images.url
+            const updatedData = await(await this.connect).collection('products').updateOne({}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
+            this.fileRemover(url)
+            this.connect.close
+            return {message: this.messages.message.delete.success, code: this.ok, data: updatedData} 
+        }
+        
+        return {message: this.messages.message.delete.notFound, code: this.notFound, data: null} 
+    }
+
+    async removeDocument(id){
+        const dataObj = await(await this.connect).collection('products').findOne({_id: ObjectID(id)})
+
+        if( dataObj && Object.keys(dataObj).length !== 0){
+            await (await this.connect).collection('products').deleteOne({_id: ObjectID(id)})
+            dataObj.images.map(image => {
+                this.fileRemover(image.url)
+            })
+        return {message: this.messages.message.delete.success, code: this.deleted, data: null} 
+    }
+    return {message: this.messages.message.delete.notFound, code: this.notFound, data: null} 
+        
+        
+    }
+
     urlHandler(url){
         return url.split('/public/')[1];
 }
+    fileRemover(url){
+        new Promise((resolve, reject) => {
+            fs.unlink(`storage/public/${url}`, (err, data) => {
+                if (err) reject(err)
+                resolve(data)
+              });
+        })
+    }
 }

@@ -65,6 +65,8 @@ paths:
     /product/store-form-data:
         post:
             description: "застосовується для збереження даних про окремі продукти. параметр images містить опис зображень продукту, та може містити до 50 зображень, переданих із вказанням індексу: images[0], images[1], ..., images[n(max 50)] виключно 2 параметри є обов'язковими: title та description . Продукт надсилається у вигляді FormData"
+            tags:
+                - Products
             requestBody:
                 content:
                     multipart/form-data:
@@ -126,6 +128,8 @@ paths:
                    schema:
                     type: string
                     required: true
+            tags:
+                - Products
             requestBody:
                 content:
                     multipart/form-data:
@@ -182,7 +186,49 @@ paths:
                     description: 'дані передано некоректно, або дані відсутні (за умови err: Cannot read property length of undefined")'
                 '500':
                     description: server error 
-
+    /product/image/{image_id}:
+        delete:
+            description: видалення зображення. Для видалення зображення потрібно передати _id зображення 
+            parameters:
+                - in: path
+                  name: image_id
+            tags:
+                - Products
+            responses:
+                '200':
+                    description: успішно видалено
+                    content:
+                        application:json:
+                            properties:
+                                product:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                '404':
+                    description: не знайдено
+                                    
+                '500':
+                    description: server error
+    /product/document/{doc_id}:
+        delete:
+            description: видалення цілого документу. Для видалення у запиті потрібно передати _id продукту. Каскадом при видаленні продукту видаляється оригінальне зображення
+            parameters:
+                - in: path
+                  name: doc_id
+            tags:
+                - Products
+            responses:
+                '204':
+                    description: успішно видалено
+                    content:
+                        application:json:
+                            properties:
+                                products:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                '404':
+                    description: не знайдено
+                '500':
+                    description: server error
 
 components:
     schemas:

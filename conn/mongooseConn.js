@@ -14,8 +14,8 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
 mongoose.connect(url, { useNewUrlParser: true, useFindAndModify: false})
     .then(() => {
-        console.log('successfully connected to the database');
+        console.log('MONGOOSE CONN SUCCESS');
     }).catch(err => {
-    console.log('error connecting to the database', err);
+    console.log('MONGOOSE CONN FAILED', err);
     process.exit();
 });

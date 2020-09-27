@@ -16,7 +16,7 @@ exports.conn = async function connect(){
    try{
       await client.connect();
       const db = client.db('test');
-      console.log(`CONNECTED to the db ${db.databaseName}`);
+      console.log(`CLEAR MONGO CONN ${db.databaseName}`);
       return db;
 
    }catch(err){

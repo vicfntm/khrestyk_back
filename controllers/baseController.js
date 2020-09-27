@@ -9,6 +9,7 @@ exports.BaseController =  class BaseController {
         this.created = 201;
         this.notFound = 404;
         this.accepted = 202;
+        this.deleted = 204;
         this.ok = 200;
     }
 }

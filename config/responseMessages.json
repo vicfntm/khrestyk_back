@@ -18,6 +18,11 @@
             "success": "ok",
             "fail": "not found",
             "unprocessable": "unprocessable entity"
+        }, 
+        "delete": {
+            "success": "ok",
+            "fail": "not found",
+            "unprocessable": "unprocessable entity"
         }
     }
    
