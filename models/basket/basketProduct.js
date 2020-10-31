@@ -1,16 +1,17 @@
-const { ObjectID } = require('mongodb')
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-const bImages = require('./basketImage').iSchema
+const image = require('../basket/basketImage').iSchema
 
-const bProductSchema = new mongoose.Schema({
-    _id: ObjectID,
-    title: String,
-    images: [bImages],
-    created_at: String,
-    amount: Number,
-    price: Number
+const cartSchema = new mongoose.Schema({
+    'title': String,
+    'images': {
+        type: [image]
+    },
+    "amount": Number,
+    "price": Number,
+    "updatedAt" : String
 })
 
-exports.bpSchema = bProductSchema
-exports.bpModel = mongoose.model('bProductModel', bProductSchema)
+
+exports.cartSchema = cartSchema
+exports.cart = mongoose.model('Cart', cartSchema)

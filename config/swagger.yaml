@@ -229,6 +229,49 @@ paths:
                     description: не знайдено
                 '500':
                     description: server error
+    /cart/add-product:
+        post:
+            description: збереження замовлення
+            tags:
+                - shoppingCart
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            allOf:
+                                - $ref: '#/components/schemas/userInfo'
+                                - $ref: '#/components/schemas/products'
+                                - orders: string
+                        example:
+                            id: id only for order updates. You will receive '__id' from first successufully saved document  id === __id 
+                            userInfo:
+                                name: John
+                                email: test@google.com
+                                phone: 29345342
+                            products: 
+                                - title: Embroidered pillow
+                                  amount: 5
+                                  price: 2.99
+                                  images: 
+                                    - alt: Image num.1 pretty nice!
+                                      image: http://somestrangeDomain.com/storage/foo-bar-bazz.jpg
+                                    - alt: Image num.2 pretty nice second!
+                                      image: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
+                            orderStatus: started
+                            
+                                
+
+                            
+
+
+                            
+            responses:
+                '200':
+                    description: ок 
+                '422':
+                    description: неможливо обробити
+                '500':
+                    description: помилка сервера
 
 components:
     schemas:
@@ -286,3 +329,35 @@ components:
             type: array
             items:
                 type: string
+        userInfo:
+            type: object
+            properties:
+            name:
+                type: string
+            email: 
+                type: string
+            phone:
+                type: string
+        products:
+            type: array 
+            items:
+                type: object 
+            properties:
+                title: 
+                    type: string
+                amount: number
+                price: number
+                images: 
+                    type: array
+                    items: 
+                        type: object 
+                        properties: 
+                            alt: 
+                                type: string, 
+                            image: 
+                                type: string
+        orderStatus:
+            type: string 
+            enum: [started, closed]
+
+
