@@ -55,11 +55,8 @@ module.exports =  class ProductController extends BaseController {
     async update(req){
         const requestToObjectCast = {...req.body}
         const fileData = [...req.files]
-        console.log('B', req.body)
-        console.log('ROC', requestToObjectCast)
         Object.keys(requestToObjectCast).forEach( key => requestToObjectCast[key] === '' && delete requestToObjectCast[key])
         fileData.forEach( (val, key) => fileData[key] === '' && delete fileData[key])
-
         try{
             let images,
                 singleElem;
@@ -77,8 +74,15 @@ module.exports =  class ProductController extends BaseController {
                 if(_id) core._id = _id
                 return core
             }) 
-            
-
+        }
+        if(req.body.images.length > 0){
+            const objWithId = req.body.images.filter(i => i._id !== '')
+            objWithId.forEach(obj =>  Object.keys(obj).forEach(key =>  obj[key] === '' && delete obj[key]) )
+            const formatted = [];
+            objWithId.map(async o => {
+                Object.keys(o).forEach(k => formatted[`images.$.${k}`] = o[k])
+                await this.productModel.findOneAndUpdate({'images._id': o._id}, {...formatted}, { upsert: false, returnOriginal: false}  )
+            })
         }
         if(images !== undefined && images.length !== 0){
             images.filter(i => i.hasOwnProperty('_id')).map(async a => {

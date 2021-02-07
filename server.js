@@ -6,7 +6,7 @@ require('dotenv').config({path:'variables.env'});
 const productRoutes = require('./routes/productRoutes');
 const sliderRoutes = require('./routes/sliderRoutes');
 const formRoutes = require('./routes/consumerFormRoutes');
-const basketRoutes = require('./routes/basketRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -25,7 +25,7 @@ app.use(express.static('./storage/public'));
 app.use('/api/v1/product', productRoutes);
 app.use('/api/v1/slider', sliderRoutes);
 app.use('/api/v1/admin/consumer-form', formRoutes);
-app.use('/api/v1/cart', basketRoutes)
+app.use('/api/v1/cart', cartRoutes)
 app.get('/', (req, res) => {
     res.send('mainpage');
     });

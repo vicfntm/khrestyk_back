@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Khrestik API
+  title: Khrestyk API
   description:  Find out how your APIs work.
   version: 1.0.0
 # info:
@@ -258,13 +258,11 @@ paths:
                                     - alt: Image num.2 pretty nice second!
                                       image: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
                             orderStatus: started
-                            
-                                
-
-                            
-
-
-                            
+    /cart/all:
+        get:
+            description: список замовлень
+            tags:
+                - shoppingCart
             responses:
                 '200':
                     description: ок 

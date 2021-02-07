@@ -1,7 +1,7 @@
 const { RequestHeaderFieldsTooLarge } = require("http-errors");
 const { BaseController } = require("./baseController");
 
-module.exports = class basketController extends BaseController {
+module.exports = class cartController extends BaseController {
 
     constructor(){  
         super()
@@ -23,9 +23,20 @@ module.exports = class basketController extends BaseController {
             await cart.save()
             return {message: this.messages.message.create.success, data: cart, code: this.ok}
         }catch(err){
-            console.log(err)
             return {message: this.messages.message.create.fail, data: null, code: this.unprocessable}
         }
         
+    }
+
+    async all(){
+        try{
+            let cartInstances;
+            cartInstances = await this.model.find()
+            return cartInstances
+
+        }catch (err){
+
+        }
+
     }
 }
