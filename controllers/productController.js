@@ -55,6 +55,8 @@ module.exports =  class ProductController extends BaseController {
     async update(req){
         const requestToObjectCast = {...req.body}
         const fileData = [...req.files]
+        console.log('B', req.body)
+        console.log('ROC', requestToObjectCast)
         Object.keys(requestToObjectCast).forEach( key => requestToObjectCast[key] === '' && delete requestToObjectCast[key])
         fileData.forEach( (val, key) => fileData[key] === '' && delete fileData[key])
 
@@ -98,15 +100,10 @@ module.exports =  class ProductController extends BaseController {
             })
         }
         delete requestToObjectCast.images
-        
-            singleElem = await (await this.connect).collection('products').findOneAndUpdate(
-                {"_id": new ObjectID(req.params.id)},
-                {$set: {...requestToObjectCast, ...{'updatedAt': new Date()}}, $inc: {__v: 1}},
-                { upsert: false, returnOriginal: false})
-
-
-        if(singleElem){ 
-                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem.value} 
+            const toUpdate = {...requestToObjectCast, ...{'updatedAt': new Date()}, $inc: {__v: 1}}
+            singleElem = await this.productModel.findOneAndUpdate({_id: req.params.id}, toUpdate, {returnOriginal: false})
+        if(singleElem){
+                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem}
             }else{
                 return {message: this.messages.message.show.fail, code: this.notFound, data: null}
             }
