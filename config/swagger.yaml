@@ -264,8 +264,23 @@ paths:
             tags:
                 - shoppingCart
             responses:
-                '200':
-                    description: ок 
+                '202':
+                    description: accepted
+                '422':
+                    description: неможливо обробити
+                '500':
+                    description: помилка сервера
+    /cart/show/{cart_id}:
+        get:
+            description: замовлення
+            tags:
+                - shoppingCart
+            parameters:
+                - in: path
+                  name: cart_id
+            responses:
+                '202':
+                    description: accepted
                 '422':
                     description: неможливо обробити
                 '500':

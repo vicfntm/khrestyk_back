@@ -11,5 +11,6 @@ exports.BaseController =  class BaseController {
         this.accepted = 202;
         this.deleted = 204;
         this.ok = 200;
+        this.serverError = 500;
     }
 }
