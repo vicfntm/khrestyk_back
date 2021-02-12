@@ -10,8 +10,7 @@ const encoder = (req, res, next) => {
             if(elem.images.length > 0){
                 try{
                     elem.images.map(imageData => {
-                        const abspath = makeAbspath(imageData.image)
-                        imageData.baseCode =  base64Convertor(abspath)
+                        imageData.url =  base64Convertor(makeAbsolutePath(imageData.url))
                     })
                 }catch(err){
                     console.log(err)
@@ -22,12 +21,12 @@ const encoder = (req, res, next) => {
     next()
 }
 
-function makeAbspath(image){
+function makeAbsolutePath(image){
     return path.dirname(require.main.filename) + `/storage/public/images/${image.split('/').slice(-1)[0]}`;
 }
-function base64Convertor(abspath){
+function base64Convertor(absolutePath){
     try{
-        binary = fs.readFileSync(abspath)
+        binary = fs.readFileSync(absolutePath)
         return binary.toString('base64')
     }catch(err){
         console.log('cant convert image to base64')

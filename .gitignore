@@ -4,3 +4,4 @@ docker-compose.yml
 .idea
 /node_modules/
 /package-lock.json
+/config/mail.json

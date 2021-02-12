@@ -231,7 +231,7 @@ paths:
                     description: server error
     /cart/add-product:
         post:
-            description: збереження замовлення
+            description: збереження замовлення. Якщо це перший продукт у кошику - відправка запиту має проводитися без вказання id. У такому випадку сервер розцінює запит як нове замовлення і створює нову сутність. Якщо користувач додає нові продукти у замовлення, потрібно відправляти повторно увесь масив даних по продуктам і раніше отримане у відповіді сервера значення id. Це призведе до операції оновлення запису. Еквівалентом оформлення замовлення, є відправка статусу orderStatus = ordered. Загалом можливі так статуси замовлення - 'started', 'ordered', 'processed', 'changed', 'finished', 'declined'
             tags:
                 - shoppingCart
             requestBody:
@@ -258,6 +258,19 @@ paths:
                                     - alt: Image num.2 pretty nice second!
                                       image: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
                             orderStatus: started
+            responses:
+                '200':
+                    description: успішно додано
+                    content:
+                        application:json:
+                            properties:
+                                products:
+                                    schema:
+                                        $ref: '#/components/schemas/Product'
+                '422':
+                    description: неможливо обробити
+                '500':
+                    description: server error
     /cart/all:
         get:
             description: список замовлень

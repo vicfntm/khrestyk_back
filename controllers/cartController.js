@@ -1,5 +1,6 @@
 const { RequestHeaderFieldsTooLarge } = require("http-errors");
 const { BaseController } = require("./baseController");
+const fs = require('fs')
 
 module.exports = class cartController extends BaseController {
 
@@ -10,10 +11,7 @@ module.exports = class cartController extends BaseController {
     async store(payload){
         let cart;
         if(payload.hasOwnProperty('id')){
-            console.log('products', payload.products)
-            
-            //  payload.products.map(elem => elem.images.map( image => {console.log(image)}))
-             const doc = this.model.findOne({_id: payload.id})
+             const doc = await this.model.findOne({_id: payload.id})
              const update = (await doc).overwrite({...payload, $inc: {__v: 1}})
              await update.save()
             return {message: this.messages.message.edit.success, data: update, code: this.ok}
@@ -27,7 +25,6 @@ module.exports = class cartController extends BaseController {
         }
         
     }
-
     async all(){
         try{
             const cartInstances = await this.model.find()

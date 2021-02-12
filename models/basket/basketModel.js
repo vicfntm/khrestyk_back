@@ -1,16 +1,16 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 const user = require('./userModel').userSchema
-const cartproduct = require('./basketProduct').cartSchema
+const cartProduct = require('./basketProduct').cartSchema
 
 const basketSchema = new mongoose.Schema({
-    products: {type: [cartproduct]},
+    products: {type: [cartProduct]},
     userInfo: {
        type: user
     },
     orderStatus: {
         type: String,
-        enum: ['started', 'sent']
+        enum: ['started', 'ordered', 'processed', 'changed', 'finished', 'declined']
         // ,
         // validate: {
         //     validator: () => Promise.resolve(false),

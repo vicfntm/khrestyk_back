@@ -4,19 +4,17 @@ mongoose.Promise = global.Promise
 
 const iSchema = new mongoose.Schema({
     alt: String,
-    image: String,
+    url: String,
     createdAt: String,
-    baseCode: String
+    // baseCode: String
 })
 
 iSchema.pre('save', function(next){
-    const image = this.image
-    console.log('CCCCCCREATE', image)
+    const image = this.baseCode
     next();
 });
 iSchema.pre('update', function(next){
-    const image = this.image
-    console.log('UUUUUUUUUUPDATE!', image)
+    const image = this.baseCode
     next();
 });
 

@@ -25,6 +25,7 @@
     "mysql2": "^2.1.0",
     "node-cron": "^2.0.3",
     "node-rsa": "^1.0.8",
+    "nodemailer": "^6.4.18",
     "nodemon": "^2.0.4",
     "sequelize": "^5.21.12",
     "swagger-jsdoc": "^4.0.0",
