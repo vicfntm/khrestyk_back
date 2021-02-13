@@ -169,12 +169,17 @@ module.exports =  class ProductController extends BaseController {
         }
         ]).toArray()
         if(Object.keys(dataObj).length !== 0){
-            const url = dataObj[0].images.url
-            const updatedData = await(await this.connect).collection('products').findOneAndUpdate({}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
-            this.fileRemover(url)
-            this.connect.close
-            const categories = await this.getUniqueCategories()
-            return {message: this.messages.message.delete.success, code: this.ok, data: {product: updatedData, categories: [...categories]}}
+            try{
+                const url = dataObj[0].images.url
+                const updatedData = await(await this.connect).collection('products').findOneAndUpdate({}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
+                this.fileRemover(url)
+                this.connect.close
+                const categories = await this.getUniqueCategories()
+                return {message: this.messages.message.delete.success, code: this.ok, data: {product: updatedData.value, categories: [...categories]}}
+            }catch (err){
+                return {message: this.messages.message.delete.notFound, code: this.serverError, data: null}
+            }
+
         }
         
         return {message: this.messages.message.delete.notFound, code: this.notFound, data: null} 
