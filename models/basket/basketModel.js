@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 const user = require('./userModel').userSchema
 const cartProduct = require('./basketProduct').cartSchema
+const ProcessingEvent = require('../../orderProcessing/models/processingEvent').pEvent;
 
 const basketSchema = new mongoose.Schema({
     products: {type: [cartProduct]},
@@ -16,6 +17,9 @@ const basketSchema = new mongoose.Schema({
         //     validator: () => Promise.resolve(false),
         //     message: 'orderStatus validation error'
         //   }
+    },
+    processing: {
+        type: [ProcessingEvent]
     },
     updatedAt: String,
     createdAt: String

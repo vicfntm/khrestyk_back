@@ -312,6 +312,8 @@ paths:
             responses:
                 '201':
                     description: created/updated
+                '404':
+                    description: not found
                 '500':
                     description: помилка сервера
 components:

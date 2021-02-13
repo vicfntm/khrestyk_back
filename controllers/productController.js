@@ -74,7 +74,7 @@ module.exports =  class ProductController extends BaseController {
                 return core
             }) 
         }
-        if(req.body.images.length > 0){
+        if( req.body.hasOwnProperty('images') || req.body.images.length !== 0){
             const objWithId = req.body.images.filter(i => i._id !== '')
             objWithId.forEach(obj =>  Object.keys(obj).forEach(key =>  obj[key] === '' && delete obj[key]) )
             const formatted = [];
