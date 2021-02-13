@@ -75,6 +75,9 @@ module.exports =  class ProductController extends BaseController {
             }) 
         }
         if(req.body.images) {
+            const hasProp = Object.prototype.hasOwnProperty.call(req.body, 'images');
+            if (!hasProp) return false;
+            return req.body['images'].length > 0
             if (req.body.images.length !== 0) {
                 const objWithId = req.body.images.filter(i => i._id !== '')
                 objWithId.forEach(obj => Object.keys(obj).forEach(key => obj[key] === '' && delete obj[key]))
@@ -167,7 +170,7 @@ module.exports =  class ProductController extends BaseController {
         ]).toArray()
         if(Object.keys(dataObj).length !== 0){
             const url = dataObj[0].images.url
-            const updatedData = await(await this.connect).collection('products').updateOne({}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
+            const updatedData = await(await this.connect).collection('products').findOneAndUpdate({}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
             this.fileRemover(url)
             this.connect.close
             const categories = await this.getUniqueCategories()
