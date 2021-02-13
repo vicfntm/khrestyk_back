@@ -10,7 +10,7 @@ const basketSchema = new mongoose.Schema({
     },
     orderStatus: {
         type: String,
-        enum: ['started', 'ordered', 'processed', 'changed', 'finished', 'declined']
+        enum: ['started', 'ordered', 'processed', 'changed', 'finished', 'declined', 'sent']
         // ,
         // validate: {
         //     validator: () => Promise.resolve(false),

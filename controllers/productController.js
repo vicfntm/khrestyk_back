@@ -13,20 +13,23 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async index () {
-        
         const connection = (await this.connect).collection('products').find({})
         const products = await connection.toArray()
         connection.close()
-        const categories = this.getUniqueCategories(products)
+        const categories = await this.getUniqueCategories()
         return {message: this.messages.message.index.success, code: this.accepted, data: {products, categories: [...categories]}};
     }
 
-    getUniqueCategories(products){
+    async getUniqueCategories(){
+        const connection = (await this.connect).collection('products').find({})
+        const products = await connection.toArray()
+        connection.close()
         const categories = new Set();
         products.map(item => {
-            if(item.category !== undefined){
+            if(item.hasOwnProperty('category') && !(item.category === undefined || item.category === "" || item.category === null)){
                 categories.add(item.category)
-         }} ) 
+            }
+     } )
          return categories
 
     }
@@ -35,21 +38,17 @@ module.exports =  class ProductController extends BaseController {
         try{
             const connection = (await this.connect).collection('products').find({})
             const products = await connection.toArray()
-            const singleElem =  products.find(i => i._id == id)
+            const product =  products.find(i => i._id == id)
             connection.close()
-            const categories = this.getUniqueCategories(products)
-            if(singleElem){
-                return {message: this.messages.message.show.success, code: this.accepted, data: {product: singleElem, categories: [...categories]}}
+            const categories = await this.getUniqueCategories()
+            if(product){
+                return {message: this.messages.message.show.success, code: this.accepted, data: {product, categories: [...categories]}}
             }else{
                 return {message: this.messages.message.show.fail, code: this.notFound, data: null }
             }
         }catch(err){
             return  {message: this.messages.message.show.unprocessable, err: err.message, code: this.unprocessable}
         }
-    }
-
-    defineProperty(target, param){
-        return target.hasOwnProperty(param) ? target[param] : undefined
     }
 
     async update(req){
@@ -62,11 +61,11 @@ module.exports =  class ProductController extends BaseController {
                 singleElem;
         if(fileData.length > 0){
             images = fileData.map((file, i) => {
-                const imgs = {...req.body.images[i]}
-                const alt = this.defineProperty(imgs, 'alt')
+                const image = {...req.body.images[i]}
+                const alt = this.defineProperty(image, 'alt')
                 const url = this.urlHandler(file.path) ? this.urlHandler(file.path) : undefined
-                const isMain = this.defineProperty(imgs, 'is_main')
-                const _id = this.defineProperty(imgs, '_id')
+                const isMain = this.defineProperty(image, 'is_main')
+                const _id = this.defineProperty(image, '_id')
                 const core = {}
                 if(alt) core.alt = alt
                 if(url) core.url = url
@@ -105,9 +104,10 @@ module.exports =  class ProductController extends BaseController {
         }
         delete requestToObjectCast.images
             const toUpdate = {...requestToObjectCast, ...{'updatedAt': new Date()}, $inc: {__v: 1}}
-            singleElem = await this.productModel.findOneAndUpdate({_id: req.params.id}, toUpdate, {returnOriginal: false})
-        if(singleElem){
-                return {message: this.messages.message.show.success, code: this.accepted, data: singleElem}
+            let product = await this.productModel.findOneAndUpdate({_id: req.params.id}, toUpdate, {returnOriginal: false})
+        if(product){
+            const categories = await this.getUniqueCategories()
+            return {message: this.messages.message.show.success, code: this.accepted, data: {product, categories : [...categories]}}
             }else{
                 return {message: this.messages.message.show.fail, code: this.notFound, data: null}
             }
@@ -117,9 +117,10 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async store(payload){
+        const categories = await this.getUniqueCategories()
         const product = new this.productModel(payload)
             const savedProduct = await product.save()
-            return {message: this.messages.message.create.success, data: savedProduct}
+            return {message: this.messages.message.create.success, data: {product: savedProduct, categories: [...categories]}}
     }
 
     async storeForm(payload){
@@ -140,8 +141,8 @@ module.exports =  class ProductController extends BaseController {
         try{
             const product = new this.productModel(fullProduct)
             const savedProduct = await product.save()
-            
-            result = {message: this.messages.message.create.success, data: savedProduct, code: this.created}    
+            const categories = await this.getUniqueCategories()
+            result = {message: this.messages.message.create.success, data: {product: savedProduct, categories: [...categories]}, code: this.created}
         }catch(err){
             result = {message: this.messages.message.create.fail, err: err.message, code: this.unprocessable}
         }
@@ -164,7 +165,8 @@ module.exports =  class ProductController extends BaseController {
             const updatedData = await(await this.connect).collection('products').updateOne({}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
             this.fileRemover(url)
             this.connect.close
-            return {message: this.messages.message.delete.success, code: this.ok, data: updatedData} 
+            const categories = await this.getUniqueCategories()
+            return {message: this.messages.message.delete.success, code: this.ok, data: {product: updatedData, categories: [...categories]}}
         }
         
         return {message: this.messages.message.delete.notFound, code: this.notFound, data: null} 
@@ -181,8 +183,12 @@ module.exports =  class ProductController extends BaseController {
         return {message: this.messages.message.delete.success, code: this.deleted, data: null} 
     }
     return {message: this.messages.message.delete.notFound, code: this.notFound, data: null} 
-        
-        
+
+    }
+
+    // ==================================  helpers ========================================= //
+    defineProperty(target, param){
+        return target.hasOwnProperty(param) ? target[param] : undefined
     }
 
     urlHandler(url){

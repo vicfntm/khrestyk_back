@@ -8,6 +8,7 @@ const sliderRoutes = require('./routes/sliderRoutes');
 const formRoutes = require('./routes/consumerFormRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const orderProcessingRoutes = require('./routes/orderProcessingRoutes')
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./config/swagger.yaml');
@@ -25,8 +26,9 @@ app.use('/api/v1/product', productRoutes);
 app.use('/api/v1/slider', sliderRoutes);
 app.use('/api/v1/admin/consumer-form', formRoutes);
 app.use('/api/v1/cart', cartRoutes)
+app.use('/api/v1/order-processing', orderProcessingRoutes)
 app.get('/', (req, res) => {
-    ml('4944995@gmail.com', 'ordered')
+    // ml('4944995@gmail.com', 'ordered')
     res.send('mainpage');
     });
 app.use('/api/v1/order', adminRoutes);
