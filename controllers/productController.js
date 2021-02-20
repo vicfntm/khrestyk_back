@@ -54,8 +54,8 @@ module.exports =  class ProductController extends BaseController {
     async update(req){
         const requestToObjectCast = {...req.body}
         const fileData = [...req.files]
-        Object.keys(requestToObjectCast).forEach( key => requestToObjectCast[key] === '' && delete requestToObjectCast[key])
-        fileData.forEach( (val, key) => fileData[key] === '' && delete fileData[key])
+        // Object.keys(requestToObjectCast).forEach( key => requestToObjectCast[key] === '' && delete requestToObjectCast[key])
+        // fileData.forEach( (val, key) => fileData[key] === '' && delete fileData[key])
         try{
             let images,
                 singleElem;
@@ -77,7 +77,7 @@ module.exports =  class ProductController extends BaseController {
         if(req.body.images) {
             if (req.body.images.length !== 0) {
                 const objWhichHasImage = req.body.images.filter(i => i._id !== '')
-                objWhichHasImage.forEach(obj => Object.keys(obj).forEach(key => obj[key] === '' && delete obj[key]))
+                // objWhichHasImage.forEach(obj => Object.keys(obj).forEach(key => obj[key] === '' && delete obj[key]))
 
                 objWhichHasImage.map(async singleObjWithImage => {
                     const formatted = [];
