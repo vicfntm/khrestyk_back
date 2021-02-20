@@ -76,15 +76,24 @@ module.exports =  class ProductController extends BaseController {
         }
         if(req.body.images) {
             if (req.body.images.length !== 0) {
-                const objWithId = req.body.images.filter(i => i._id !== '')
-                objWithId.forEach(obj => Object.keys(obj).forEach(key => obj[key] === '' && delete obj[key]))
-                const formatted = [];
-                objWithId.map(async o => {
-                    Object.keys(o).forEach(k => formatted[`images.$.${k}`] = o[k])
-                    await this.productModel.findOneAndUpdate({'images._id': o._id}, {...formatted}, {
+                const objWhichHasImage = req.body.images.filter(i => i._id !== '')
+                objWhichHasImage.forEach(obj => Object.keys(obj).forEach(key => obj[key] === '' && delete obj[key]))
+
+                objWhichHasImage.map(async singleObjWithImage => {
+                    const formatted = [];
+                    console.log('O 83', singleObjWithImage)
+                    for (const key of Object.keys(singleObjWithImage)) {
+                        // console.log('K 85', image)
+                        formatted[`images.$.${key}`] = singleObjWithImage[key];
+
+
+                    }
+                    console.log('F 90', formatted)
+                    await this.productModel.findOneAndUpdate({'images._id': singleObjWithImage._id}, {...formatted}, {
                         upsert: false,
                         returnOriginal: false
                     })
+
                 })
             }
         }
