@@ -81,14 +81,9 @@ module.exports =  class ProductController extends BaseController {
 
                 objWhichHasImage.map(async singleObjWithImage => {
                     const formatted = [];
-                    console.log('O 83', singleObjWithImage)
                     for (const key of Object.keys(singleObjWithImage)) {
-                        // console.log('K 85', image)
                         formatted[`images.$.${key}`] = singleObjWithImage[key];
-
-
                     }
-                    console.log('F 90', formatted)
                     await this.productModel.findOneAndUpdate({'images._id': singleObjWithImage._id}, {...formatted}, {
                         upsert: false,
                         returnOriginal: false
@@ -178,7 +173,6 @@ module.exports =  class ProductController extends BaseController {
             try{
                 const url = dataObj[0].images.url
                 const updatedData = await this.productModel.findOneAndUpdate({_id : dataObj[0]._id}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
-                console.log(updatedData)
                 this.fileRemover(url)
                 this.connect.close
                 const categories = await this.getUniqueCategories()
