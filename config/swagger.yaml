@@ -203,11 +203,11 @@ paths:
                                 product:
                                     schema:
                                         $ref: '#/components/schemas/Product'
-                                        '404':
-                                            description: не знайдено
+                '404':
+                    description: не знайдено
 
-                                        '500':
-                                            description: server error
+                '500':
+                    description: server error
 
         patch:
             description: додавання зображення. Для додавання потрібно передати _id продукту у якому має бути поміщене зображення
@@ -238,11 +238,11 @@ paths:
                               product:
                                   schema:
                                       $ref: '#/components/schemas/Product'
-                                      '404':
-                                          description: не знайдено
+              '404':
+                  description: не знайдено
 
-                                      '500':
-                                          description: server error
+              '500':
+                  description: server error
 
     /product/document/{doc_id}:
         delete:
