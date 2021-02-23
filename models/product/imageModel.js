@@ -3,7 +3,10 @@ mongoose.Promise = global.Promise
 
 const imageSchema = new mongoose.Schema({
     alt: String,
-    is_main: Boolean,
+    is_main: {
+        type: Boolean,
+        required: true
+    },
     url: String
 })
 

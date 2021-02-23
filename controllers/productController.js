@@ -62,6 +62,7 @@ module.exports =  class ProductController extends BaseController {
         if(fileData.length > 0){
             images = fileData.map((file, i) => {
                 const image = {...req.body.images[i]}
+                console.log('IMAGE', JSON.stringify(image[i]))
                 const alt = this.defineProperty(image, 'alt')
                 const url = this.urlHandler(file.path) ? this.urlHandler(file.path) : undefined
                 const isMain = this.defineProperty(image, 'is_main')
@@ -158,6 +159,25 @@ module.exports =  class ProductController extends BaseController {
         return result
 }
 
+    async addImage(data){
+        try{
+            const merged = data.body.images.map((i, k) => {
+                const {alt, is_main} = i
+                return  {alt, is_main, url: `images/${data.files[k].filename}`}
+            })
+            console.log('ID', data.param('id'))
+            const res = await this.productModel.findOneAndUpdate(
+                {_id: data.param('id')},
+                {$push: {images: merged}},
+                {returnOriginal: false}
+            )
+            return {message: this.messages.message.create.success, code: this.ok, data: res}
+        }catch (err){
+            console.log(err)
+            return {message: this.messages.message.create.fail, code: this.unprocessable, data: null}
+        }
+
+    }
     async removeImage(id){
         const dataObj = await(await this.connect).collection('products').aggregate([
             {$match: {

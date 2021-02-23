@@ -186,12 +186,12 @@ paths:
                     description: 'дані передано некоректно, або дані відсутні (за умови err: Cannot read property length of undefined")'
                 '500':
                     description: server error 
-    /product/image/{image_id}:
+    /product/image/{id}:
         delete:
             description: видалення зображення. Для видалення зображення потрібно передати _id зображення 
             parameters:
                 - in: path
-                  name: image_id
+                  name: id
             tags:
                 - Products
             responses:
@@ -203,11 +203,47 @@ paths:
                                 product:
                                     schema:
                                         $ref: '#/components/schemas/Product'
-                '404':
-                    description: не знайдено
-                                    
-                '500':
-                    description: server error
+                                        '404':
+                                            description: не знайдено
+
+                                        '500':
+                                            description: server error
+
+        patch:
+            description: додавання зображення. Для додавання потрібно передати _id продукту у якому має бути поміщене зображення
+            parameters:
+                  - in: path
+                    name: id
+            tags:
+              - Products
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                images[0][alt]:
+                                    type: string
+                                images[0][is_main]:
+                                    type: boolean
+                                    default: true
+                                images[0]:
+                                    type: file
+            responses:
+              '200':
+                  description: успішно видалено
+                  content:
+                      application:json:
+                          properties:
+                              product:
+                                  schema:
+                                      $ref: '#/components/schemas/Product'
+                                      '404':
+                                          description: не знайдено
+
+                                      '500':
+                                          description: server error
+
     /product/document/{doc_id}:
         delete:
             description: видалення цілого документу. Для видалення у запиті потрібно передати _id продукту. Каскадом при видаленні продукту видаляється оригінальне зображення
