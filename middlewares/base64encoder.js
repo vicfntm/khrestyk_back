@@ -9,8 +9,14 @@ const encoder = (req, res, next) => {
         for(const elem of req.body.products){
             if(elem.images.length > 0){
                 try{
-                    elem.images.map(imageData => {
-                        imageData.url =  base64Convertor(makeAbsolutePath(imageData.url))
+                    elem.images.map((imageData, k) => {
+                        const convertedImage = base64Convertor(makeAbsolutePath(imageData.url));
+                        if(convertedImage !== undefined){
+                            imageData.url = convertedImage;
+                        }else{
+                            delete(imageData.url)
+                        }
+
                     })
                 }catch(err){
                     console.log(err)
@@ -22,7 +28,11 @@ const encoder = (req, res, next) => {
 }
 
 function makeAbsolutePath(image){
-    return path.dirname(require.main.filename) + `/storage/public/images/${image.split('/').slice(-1)[0]}`;
+    try{
+        return path.dirname(require.main.filename) + `/storage/public/images/${image.split('/').slice(-1)[0]}`;
+    }catch(err){
+        return undefined;
+    }
 }
 function base64Convertor(absolutePath){
     try{
@@ -30,7 +40,7 @@ function base64Convertor(absolutePath){
         return binary.toString('base64')
     }catch(err){
         console.log('cant convert image to base64')
-        return 'not converted'
+        return undefined
     }
     
 }

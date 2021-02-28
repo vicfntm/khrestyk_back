@@ -6,7 +6,7 @@ module.exports = class AdminController extends BaseController {
 
     constructor(){
         super()
-        this.model = require('../models/imports').basket
+        this.model = require('../models/imports').cart
     }
 
     async index(req) {

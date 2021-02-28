@@ -1,30 +1,28 @@
-const { BaseController } = require("../../controllers/baseController");
+const { BaseController } = require("../../controllers/baseController")
+const broker = require('../../services/email/messageBroker')
+const event = broker('email')
 
 module.exports = class orderProcessing extends  BaseController{
 
     constructor(){
         super()
-        this.model = require('../../models/imports').basket
+        this.model = require('../../models/imports').cart
     }
 
     async updateOrder(request){
         const id = request.param('id')
         const status = request.param('status')
-        // find element
         try{
-            const date = new Date();
-            // const order = await this.model.findOneAndUpdate({_id: id}, {$push: {processing: {processingStatus: status, content: ''}}});
-            const order = await this.model.updateOne({_id: id}, {$push: {processing: {processingStatus: status, createdAt : date.toISOString()}}, 'orderStatus': status}, {returnOriginal: false});
-            console.log('ORDER', order)
+            const date = new Date()
+            const orderObject = await this.model.findOne({_id: id})
+            orderObject.processing.push( {content: request.body.content, processingStatus: status, createdAt : date.toISOString()})
+            orderObject.orderStatus = status
+            const order = await orderObject.save()
+            event(orderObject.userInfo.email, status, {msg: request.body.content})
+
+            return {message: this.messages.message.create.success, code: this.accepted, data: order}
         }catch(err){
-            return {code: this.notFound}
+            return {message: this.messages.message.show.unprocessable, code: this.serverError, data: null}
         }
-        // update
-        // send mail if need
-
-        console.log('ID', id)
-        console.log('STATUS', status)
-        return 'ok'
-
     }
 }

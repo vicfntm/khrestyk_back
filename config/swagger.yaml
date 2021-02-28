@@ -277,6 +277,7 @@ paths:
                             allOf:
                                 - $ref: '#/components/schemas/userInfo'
                                 - $ref: '#/components/schemas/products'
+                                - $ref: '#/components/schemas/processing'
                                 - orders: string
                         example:
                             id: id only for order updates. You will receive '__id' from first successufully saved document  id === __id 
@@ -288,12 +289,17 @@ paths:
                                 - title: Embroidered pillow
                                   amount: 5
                                   price: 2.99
-                                  images: 
+                                  images:
                                     - alt: Image num.1 pretty nice!
                                       image: http://somestrangeDomain.com/storage/foo-bar-bazz.jpg
+                                      is_main: true
                                     - alt: Image num.2 pretty nice second!
                                       image: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
-                            orderStatus: started
+                                      is_main: false
+                            processing:
+                                - processingStatus: ordered
+                                  content: "initial order"
+                            orderStatus: ordered
             responses:
                 '200':
                     description: успішно додано
@@ -336,7 +342,7 @@ paths:
                     description: помилка сервера
     /order-processing/{id}/{status}:
         patch:
-            description: оновлення статусів замовлення (процессінг)
+            description: оновлення статусів замовлення (процессінг). Content містить важливу супутню інформацію про замовлення - дані про відправку, листування з замовником, і т.п.
             tags:
                 - orderProcessing
             parameters:
@@ -344,7 +350,14 @@ paths:
                   name: id
                 - in : path
                   name: status
-
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                content:
+                                    type: string
             responses:
                 '201':
                     description: created/updated
@@ -438,5 +451,15 @@ components:
         orderStatus:
             type: string 
             enum: [started, closed]
+        processing:
+            type:
+                array
+            items:
+                type: object
+                    properties:
+                        processingStatus:
+                            type: string
+                        content:
+                            type: string
 
 

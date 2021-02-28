@@ -6,12 +6,13 @@ module.exports = class cartController extends BaseController {
 
     constructor(){  
         super()
-        this.model = require('../models/imports').basket
+        this.model = require('../models/imports').cart
     }
     async store(payload){
         let cart;
         if(payload.hasOwnProperty('id')){
              const doc = await this.model.findOne({_id: payload.id})
+            console.log("PAYLOAD CC", payload)
              const update = (await doc).overwrite({...payload, $inc: {__v: 1}})
              await update.save()
             return {message: this.messages.message.edit.success, data: update, code: this.ok}
