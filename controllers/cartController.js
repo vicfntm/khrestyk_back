@@ -12,9 +12,7 @@ module.exports = class cartController extends BaseController {
     async store(payload){
         let mailTarget;
         let cart;
-        console.log(payload)
         if(payload.hasOwnProperty('userInfo')){
-            console.log('PL', payload.userInfo)
             mailTarget = definer(payload.orderStatus, payload.userInfo.email)
         }
         if(payload.hasOwnProperty('id')){
