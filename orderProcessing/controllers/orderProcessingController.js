@@ -1,7 +1,7 @@
 const { BaseController } = require("../../controllers/baseController")
 const broker = require('../../services/email/messageBroker')
 const event = broker('email')
-
+const definer = require('../../services/email/receiverDefiner')
 module.exports = class orderProcessing extends  BaseController{
 
     constructor(){
@@ -18,7 +18,8 @@ module.exports = class orderProcessing extends  BaseController{
             orderObject.processing.push( {content: request.body.content, processingStatus: status, createdAt : date.toISOString()})
             orderObject.orderStatus = status
             const order = await orderObject.save()
-            event(orderObject.userInfo.email, status, {msg: request.body.content})
+            const sendTo = definer(status, orderObject.userInfo.email)
+            event(sendTo, status, {msg: request.body.content}) // will be send only if sentTo differ than undefined
 
             return {message: this.messages.message.create.success, code: this.accepted, data: order}
         }catch(err){

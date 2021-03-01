@@ -1,7 +1,8 @@
 const { RequestHeaderFieldsTooLarge } = require("http-errors");
 const { BaseController } = require("./baseController");
-const fs = require('fs')
-
+const definer = require('../services/email/receiverDefiner')
+const broker = require('../services/email/messageBroker')
+const event = broker('email')
 module.exports = class cartController extends BaseController {
 
     constructor(){  
@@ -9,20 +10,28 @@ module.exports = class cartController extends BaseController {
         this.model = require('../models/imports').cart
     }
     async store(payload){
+        let mailTarget;
         let cart;
+        console.log(payload)
+        if(payload.hasOwnProperty('userInfo')){
+            console.log('PL', payload.userInfo)
+            mailTarget = definer(payload.orderStatus, payload.userInfo.email)
+        }
         if(payload.hasOwnProperty('id')){
              const doc = await this.model.findOne({_id: payload.id})
-            console.log("PAYLOAD CC", payload)
              const update = (await doc).overwrite({...payload, $inc: {__v: 1}})
              await update.save()
+            event(mailTarget, payload.orderStatus, {msg: `new order: ${update._id}`})
             return {message: this.messages.message.edit.success, data: update, code: this.ok}
         }
         try{
             cart = new this.model(payload)
             await cart.save()
+            event(mailTarget, payload.orderStatus, {msg: `new order: ${cart._id}`})
             return {message: this.messages.message.create.success, data: cart, code: this.ok}
         }catch(err){
             return {message: this.messages.message.create.fail, data: null, code: this.unprocessable}
+
         }
         
     }

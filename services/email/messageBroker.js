@@ -1,6 +1,7 @@
 const mailer = require('./mailer')
 
 module.exports = (transportType) => {
+
     switch(transportType){
         case 'email':
             return mailer

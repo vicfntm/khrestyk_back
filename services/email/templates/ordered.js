@@ -4,10 +4,10 @@ module.exports = data => {
         "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="utf-8">
 <head>
-    <title>Ваше замовлення отримано</title>
+    <title>Нове замовлення</title>
 </head>
 <body>
-    дякуємо за замовлення! Ми зателефонуємо Вам найближчим часом
+    Зареєстровано запис з id ${data.msg}
 </body>
 </html>`
 }
