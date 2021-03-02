@@ -4,6 +4,7 @@
     "./server.js", "dbConnections/", "migrations/", "models/", 
     "controllers/", "middlewares/", "controllers", "routes/", 
     "models/mongoModels/", "middlewares/modificators/dictionaryModificators", 
-    "schedules/", "subscribers/", "config/*.*", "services/", "orderProcessing/"
+    "schedules/", "subscribers/", "config/*.*", "services/", "orderProcessing/",
+    "auth/"
   ]
 }

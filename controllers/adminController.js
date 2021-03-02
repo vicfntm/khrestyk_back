@@ -1,4 +1,4 @@
-const { BaseController } = require("./baseController");
+const { BaseController } = require("./baseController")
 
 
 module.exports = class AdminController extends BaseController {

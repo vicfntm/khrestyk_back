@@ -15,6 +15,7 @@ const swaggerDocument = YAML.load('./config/swagger.yaml');
 const multer = require('multer')()
 require('./conn/mongooseConn');
 const ml = require('./services/email/mailer')
+const authRoutes = require('./routes/authRoutes')
 app.use(cors({origin: '*', credentials: true}));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: true}))
@@ -27,6 +28,7 @@ app.use('/api/v1/slider', sliderRoutes);
 app.use('/api/v1/admin/consumer-form', formRoutes);
 app.use('/api/v1/cart', cartRoutes)
 app.use('/api/v1/order-processing', orderProcessingRoutes)
+app.use('/api/v1/auth', authRoutes)
 app.get('/', (req, res) => {
     // ml('4944995@gmail.com', 'ordered')
     res.send('mainpage');
