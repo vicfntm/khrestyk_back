@@ -35,6 +35,9 @@ app.get('/', (req, res) => {
     });
 app.use('/api/v1/order', adminRoutes);
 
+app.use(function (err, req, res, next) {
+    res.status(500).json(err.message)
+})
 app.listen(process.env.SERVER_PORT, () => {
     console.log(`SERVER on port ${process.env.SERVER_PORT}`);
 });
