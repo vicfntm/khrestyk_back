@@ -365,6 +365,26 @@ paths:
                     description: not found
                 '500':
                     description: помилка сервера
+    /auth/login:
+        post:
+            description: отримання токену
+            tags:
+                - authentification
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                login:
+                                    type: string
+                                password:
+                                    type: string
+            responses:
+                '200':
+                    description: ok
+                '500':
+                    description: помилка сервера
 components:
     schemas:
         Product:
