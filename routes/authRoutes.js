@@ -8,7 +8,7 @@ const validateToken = require('../middlewares/checkJwt')
 const checkRoles = require('../middlewares/roleChecker')
 router.post('/create-user',  validateToken, checkRoles('admin'), hashMaker, async(req, res) => {
     const result = await controllerInstance.createUser(req)
-    res.json(result)
+    res.status(result.code).json(result)
 })
 router.post('/login', userFinder, async(req, res) => {
     const token = await controllerInstance.login(req)

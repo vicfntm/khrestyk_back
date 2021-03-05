@@ -36,7 +36,6 @@ app.get('/', (req, res) => {
 app.use('/api/v1/order', adminRoutes);
 
 app.use(function (err, req, res, next) {
-    console.log(app.get('env'))
     res.status(500).json({message: err.message})
 
 })

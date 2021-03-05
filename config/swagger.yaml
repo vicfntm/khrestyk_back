@@ -385,7 +385,35 @@ paths:
                     description: ok
                 '500':
                     description: помилка сервера
+    /auth/create-user:
+        post:
+            description: створення юзера(користувача системи). Метод використовується для додавання "адмінів". звичайні покупці через цей метод не створюються
+            tags:
+                - authentification
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                login:
+                                    type: string
+                                password:
+                                    type: string
+            responses:
+                '200':
+                    description: ok
+                '500':
+                    description: помилка сервера
+
 components:
+    securitySchemes:
+        bearerAuth:
+            type: apiKey
+            name: token
+            in: header
     schemas:
         Product:
             type: object
