@@ -1,12 +1,11 @@
 const express = require('express')
-const { BaseController } = require('../controllers/baseController')
 const cartController = require('../controllers/cartController')
 const router = express.Router()
 const cartHandler = new cartController()
 const {encodeImage} = require('../middlewares/base64encoder')
+const throttle = require('../middlewares/throttle')
 
-
-router.post('/add-product', encodeImage, async(req, res) => {
+router.post('/add-product', throttle, encodeImage, async(req, res) => {
     const result = await cartHandler.store(req.body)
    res.status(result.code).json(result)
 })

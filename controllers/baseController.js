@@ -7,6 +7,7 @@ exports.BaseController =  class BaseController {
         this.ObjectId = objectId
         this.unprocessable = 422;
         this.created = 201;
+        this.forbidden = 403;
         this.notFound = 404;
         this.accepted = 202;
         this.deleted = 204;
