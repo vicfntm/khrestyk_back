@@ -5,6 +5,6 @@
     "controllers/", "middlewares/", "controllers", "routes/", 
     "models/mongoModels/", "middlewares/modificators/dictionaryModificators", 
     "schedules/", "subscribers/", "config/*.*", "services/", "orderProcessing/",
-    "auth/", "conn/"
+    "auth/", "conn/", "./app.js"
   ]
 }

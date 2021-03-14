@@ -19,3 +19,4 @@ mongoose.connect(url, { useNewUrlParser: true, useFindAndModify: false})
     console.log('MONGOOSE CONN FAILED', err);
     process.exit();
 });
+module.exports = mongoose

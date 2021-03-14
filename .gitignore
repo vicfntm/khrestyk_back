@@ -6,3 +6,5 @@ docker-compose.yml
 /package-lock.json
 /config/mail.json
 /config/
+/winston.log
+/config/session.json

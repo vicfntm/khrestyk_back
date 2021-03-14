@@ -2,7 +2,6 @@
 const {BaseController} = require('./baseController')
 const {ObjectID} = require('mongodb')
 const { prototype } = require('node-rsa')
-// const { delete } = require('../routes/sliderRoutes')
 const fs = require('fs')
 module.exports =  class ProductController extends BaseController {
 
