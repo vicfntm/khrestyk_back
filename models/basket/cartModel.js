@@ -45,4 +45,4 @@ cartSchema.pre('query', function(query, next) {
     next();
 
 })
-module.exports = mongoose.model('Cart', cartSchema);
+module.exports = mongoose.model('Basket', cartSchema);
