@@ -297,10 +297,10 @@ paths:
                                   price: 2.99
                                   images:
                                     - alt: Image num.1 pretty nice!
-                                      image: http://somestrangeDomain.com/storage/foo-bar-bazz.jpg
+                                      url: http://somestrangeDomain.com/storage/foo-bar-bazz.jpg
                                       is_main: true
                                     - alt: Image num.2 pretty nice second!
-                                      image: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
+                                      url: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
                                       is_main: false
                             processing:
                                 - processingStatus: ordered
