@@ -9,8 +9,8 @@ module.exports = class AdminController extends BaseController {
         this.model = require('../models/imports').cart
     }
 
-    async index(req) {
-        return await this.model.find({})
+    async index() {
+        return this.model.find({})
     }
 
 
