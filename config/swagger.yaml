@@ -291,17 +291,24 @@ paths:
                                 name: John
                                 email: test@google.com
                                 phone: 29345342
-                            products: 
-                                - title: Embroidered pillow
-                                  amount: 5
+                            products:
+                                - _id: 5f479732150199002d8b0c59
+                                  isActive: true,
+                                  description: Let that Shit Go, Custom Gift, Inspirational Cuff, Motivational Jewelry, Gift for Her, Unique Gift for Women
+                                  title: Embroidered pillow
                                   price: 2.99
+                                  qty_available: 10
+                                  amount: 5
+                                  category: for her
                                   images:
                                     - alt: Image num.1 pretty nice!
                                       url: http://somestrangeDomain.com/storage/foo-bar-bazz.jpg
                                       is_main: true
+                                      _id: 60352430c037bd003bfeb583
                                     - alt: Image num.2 pretty nice second!
                                       url: http://somestrangeDomain.com/storage/bla-2387h3hhgS76.jpg
                                       is_main: false
+                                      _id: 5f708c417faf29003102b2cd
                             processing:
                                 - processingStatus: ordered
                                   content: "initial order"

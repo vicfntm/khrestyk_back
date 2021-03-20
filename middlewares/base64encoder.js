@@ -12,9 +12,7 @@ const encoder = (req, res, next) => {
                     elem.images.map((imageData, k) => {
                         const convertedImage = base64Convertor(makeAbsolutePath(imageData.url));
                         if(convertedImage !== undefined){
-                            imageData.url = convertedImage;
-                        }else{
-                            delete(imageData.url)
+                            imageData.image = convertedImage;
                         }
 
                     })
