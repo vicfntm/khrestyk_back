@@ -2,7 +2,7 @@ const RateLimiter = require('limiter').RateLimiter
 const RATE_LIMIT = 60
 const MS = 'minute'
 const limiter = new RateLimiter(RATE_LIMIT, MS)
-const winston = require('winston')
+const winston = require('../loggers/logging')
 
 module.exports = (req, res, next) => {
     limiter.removeTokens(1, (err, remainReq) => {
