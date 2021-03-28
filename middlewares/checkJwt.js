@@ -12,5 +12,5 @@ module.exports = async (req, res, next) => {
 }
 
 async function getUser(jwt) {
-    return await model.findOne({_id: jwt.id})
+    return await model.findOne({_id: jwt._id})
 }

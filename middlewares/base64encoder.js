@@ -1,6 +1,7 @@
 const { product } = require("../models/imports")
 const fs = require('fs')
 const { dir } = require("console")
+const winston = require('winston')
 path = require('path')
 
 const encoder = (req, res, next) => {
@@ -17,7 +18,7 @@ const encoder = (req, res, next) => {
 
                     })
                 }catch(err){
-                    console.log(err)
+                    winston.error(err)
                 }
             }
         }
@@ -34,10 +35,10 @@ function makeAbsolutePath(image){
 }
 function base64Convertor(absolutePath){
     try{
-        binary = fs.readFileSync(absolutePath)
+        const binary = fs.readFileSync(absolutePath)
         return binary.toString('base64')
     }catch(err){
-        console.log('cant convert image to base64')
+        winston.error('cant convert image to base64')
         return undefined
     }
     

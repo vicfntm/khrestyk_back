@@ -13,7 +13,9 @@ const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./config/swagger.yaml')
 require('multer')()
-require('./loggers/winstonLogs')
+// require('./loggers/winstonLogs')
+// require('winston')
+const winston = require('./loggers/logging')
 // const event = require('./server').event
 // require('./conn/mongooseConn')
 const authRoutes = require('./routes/authRoutes')
@@ -60,13 +62,12 @@ app.use(function (err, req, res, next) {
 // const event = require('events')
 // const emitter = new event()
 // emitter.on('evEmitted', (event) =>  {
-//     console.log(event)
 // })
 // module.exports.event = emitter
 // const {app} = require('./app')
 
 const ent = app.listen(process.env.SERVER_PORT, () => {
-    console.log(`SERVER on port ${process.env.SERVER_PORT}`);
+    winston.info(`SERVER on port ${process.env.SERVER_PORT}`);
 });
 
 module.exports = ent
