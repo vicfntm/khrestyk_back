@@ -34,7 +34,7 @@ module.exports = class cartController extends BaseController {
 
     }
     async all(queryParams){
-        const {take, skip} = queryParams;
+        const {take=2, skip=0} = queryParams;
         try{
             const count = await this.model.count();
             const data = await this.model.find({}).skip(parseInt(skip)).limit(parseInt(take));
