@@ -33,10 +33,12 @@ module.exports = class cartController extends BaseController {
         }
         
     }
-    async all(){
+    async all(queryParams){
+        const {take, skip} = queryParams;
         try{
-            const data = await this.model.find({})
-            return  {message: this.messages.message.show.success, data: data, code: this.accepted}
+            const count = await this.model.count();
+            const data = await this.model.find({}).skip(parseInt(skip)).limit(parseInt(take));
+            return  {message: this.messages.message.show.success, data: data, code: this.accepted, count}
 
         }catch (err){
             return {message: this.messages.message.create.fail, data: null, code: this.serverError}

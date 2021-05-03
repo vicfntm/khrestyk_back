@@ -314,6 +314,19 @@ paths:
                 '500':
                     description: server error
     /cart/all:
+        parameters:
+            - in: query
+              name: take
+#              style: form
+              schema:
+                  type: integer
+                  description: "кількість елементів, що потрібно повернути"
+            - in: query
+              name: skip
+              schema:
+                  type: integer
+                  description: "кількість елементів, що потрібно пропустити"
+#              style: form
         get:
             description: список замовлень
             tags:

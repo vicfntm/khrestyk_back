@@ -8,3 +8,7 @@ docker-compose.yml
 /config/
 /winston.log
 /config/session.json
+/combined.log
+/debug.log
+/error.log
+/jest.config.js

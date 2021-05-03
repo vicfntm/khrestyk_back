@@ -11,7 +11,7 @@ router.post('/add-product', throttle, encodeImage, async(req, res) => {
 })
 
 router.get('/all', async (req, res) => {
-    const result = await cartHandler.all()
+    const result = await cartHandler.all(req.query)
     res.status(result.code).json(result)
 })
 
