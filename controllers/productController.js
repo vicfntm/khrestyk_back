@@ -2,6 +2,7 @@
 const {BaseController} = require('./baseController')
 const {ObjectID} = require('mongodb')
 const { prototype } = require('node-rsa')
+const winston = require('../loggers/logging')
 const fs = require('fs')
 module.exports =  class ProductController extends BaseController {
 
@@ -12,7 +13,7 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async index () {
-        const connection = (await this.connect).collection('products').find({})
+        const connection = (await this.connect()).collection('products').find({})
         const products = await connection.toArray()
         connection.close()
         const categories = await this.getUniqueCategories()
@@ -20,7 +21,7 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async getUniqueCategories(){
-        const connection = (await this.connect).collection('products').find({})
+        const connection = (await this.connect()).collection('products').find({})
         const products = await connection.toArray()
         connection.close()
         const categories = new Set();
@@ -35,7 +36,7 @@ module.exports =  class ProductController extends BaseController {
 
     async show(id){
         try{
-            const connection = (await this.connect).collection('products').find({})
+            const connection = (await this.connect()).collection('products').find({})
             const products = await connection.toArray()
             const product =  products.find(i => i._id == id)
             connection.close()
@@ -61,7 +62,7 @@ module.exports =  class ProductController extends BaseController {
         if(fileData.length > 0){
             images = fileData.map((file, i) => {
                 const image = {...req.body.images[i]}
-                console.log('IMAGE', JSON.stringify(image[i]))
+                winston.debug('IMAGE', JSON.stringify(image[i]))
                 const alt = this.defineProperty(image, 'alt')
                 const url = this.urlHandler(file.path) ? this.urlHandler(file.path) : undefined
                 const isMain = this.defineProperty(image, 'is_main')
@@ -95,7 +96,7 @@ module.exports =  class ProductController extends BaseController {
         if(images !== undefined && images.length !== 0){
             images.filter(i => i.hasOwnProperty('_id')).map(async a => {
                 console.table(a)
-                await (await this.connect).collection('products').findOneAndUpdate(
+                await (await this.connect()).collection('products').findOneAndUpdate(
                     {'images._id': new ObjectID(a._id)},
                     {$set: {'images.$': a},
                      $inc: {__v: 1}
@@ -103,7 +104,7 @@ module.exports =  class ProductController extends BaseController {
                     { upsert: false, returnOriginal: false})
             })
             images.filter(i => !i.hasOwnProperty('_id')).map(async b => {
-                await (await this.connect).collection('products').findOneAndUpdate(
+                await (await this.connect()).collection('products').findOneAndUpdate(
                     {"_id": new ObjectID(req.params.id)},
                     {$push: {'images': {...b, ...{_id: new ObjectID()}}},
                      $inc: {__v: 1}
@@ -164,7 +165,7 @@ module.exports =  class ProductController extends BaseController {
                 const {alt, is_main} = i
                 return  {alt, is_main, url: `images/${data.files[k].filename}`}
             })
-            console.log('ID', data.param('id'))
+            winston.debug('ID', data.param('id'))
             const res = await this.productModel.findOneAndUpdate(
                 {_id: data.param('id')},
                 {$push: {images: merged}},
@@ -172,13 +173,13 @@ module.exports =  class ProductController extends BaseController {
             )
             return {message: this.messages.message.create.success, code: this.ok, data: res}
         }catch (err){
-            console.log(err)
+            winston.debug(err)
             return {message: this.messages.message.create.fail, code: this.unprocessable, data: null}
         }
 
     }
     async removeImage(id){
-        const dataObj = await(await this.connect).collection('products').aggregate([
+        const dataObj = await(await this.connect()).collection('products').aggregate([
             {$match: {
                 'images._id': ObjectID(id)
             }},
@@ -193,7 +194,7 @@ module.exports =  class ProductController extends BaseController {
                 const url = dataObj[0].images.url
                 const updatedData = await this.productModel.findOneAndUpdate({_id : dataObj[0]._id}, {$pull: {images: {_id: ObjectID(id)}}}, {returnOriginal: false})
                 this.fileRemover(url)
-                this.connect.close
+                this.connect().close
                 const categories = await this.getUniqueCategories()
                 return {message: this.messages.message.delete.success, code: this.ok, data: {product: updatedData, categories: [...categories]}}
             }catch (err){
@@ -205,10 +206,10 @@ module.exports =  class ProductController extends BaseController {
     }
 
     async removeDocument(id){
-        const dataObj = await(await this.connect).collection('products').findOne({_id: ObjectID(id)})
+        const dataObj = await(await this.connect()).collection('products').findOne({_id: ObjectID(id)})
 
         if( dataObj && Object.keys(dataObj).length !== 0){
-            await (await this.connect).collection('products').deleteOne({_id: ObjectID(id)})
+            await (await this.connect()).collection('products').deleteOne({_id: ObjectID(id)})
             dataObj.images.map(image => {
                 this.fileRemover(image.url)
             })

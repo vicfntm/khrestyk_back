@@ -5,7 +5,7 @@ const event = broker('email')
 require('../conn/mongooseConn')
 module.exports = class cartController extends BaseController {
 
-    constructor(){  
+    constructor(){
         super()
         this.model = require('../models/imports').cart
     }
@@ -17,7 +17,7 @@ module.exports = class cartController extends BaseController {
         }
         if(payload.hasOwnProperty('id')){
              const doc = await this.model.findOne({_id: payload.id})
-             const update = (await doc).overwrite({...payload, $inc: {__v: 1}})
+             const update = (await doc).overwrite({...payload, $inc: {__v: 1, _id: false}})
              await update.save()
             event(mailTarget, payload.orderStatus, {msg: `new order: ${update._id}`})
             return {message: this.messages.message.edit.success, data: update, code: this.ok}
@@ -31,7 +31,7 @@ module.exports = class cartController extends BaseController {
             return {message: this.messages.message.create.fail, data: null, code: this.unprocessable}
 
         }
-        
+
     }
     async all(queryParams){
         const {take, skip} = queryParams;

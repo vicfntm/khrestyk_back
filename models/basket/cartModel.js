@@ -4,7 +4,6 @@ const user = require('./userModel').userSchema
 const cartProduct = require('./basketProduct').cartSchema
 const ProcessingEvent = require('../../orderProcessing/models/processingEvent').processingSchema
 
-
 const cartSchema = new mongoose.Schema({
     products: {type: [cartProduct]},
     userInfo: {
@@ -40,7 +39,6 @@ cartSchema.pre('findOneAndUpdate', function(data, next){
 });
 
 cartSchema.pre('query', function(query, next) {
-    console.log('REQUEST ===== REQUEST');
     query.populate('Category');
     next();
 
