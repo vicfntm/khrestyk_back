@@ -12,3 +12,7 @@ docker-compose.yml
 /debug.log
 /error.log
 /jest.config.js
+/ansible/
+/frontend/
+/mongo/
+/images/

@@ -26,16 +26,16 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static('./storage/public'));
 // const {setAsync, getAsync} = require('./conn/redisConn')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
+// const session = require('express-session')
 app.use(cookieParser())
-const sessConfig = require('./config/session.json')
-app.use(session(sessConfig))
-app.use('/api/v1/product', productRoutes);
-app.use('/api/v1/slider', sliderRoutes);
-app.use('/api/v1/admin/consumer-form', formRoutes);
-app.use('/api/v1/cart', cartRoutes)
-app.use('/api/v1/order-processing', orderProcessingRoutes)
-app.use('/api/v1/auth', authRoutes)
+// const sessConfig = require('./config/session.json')
+// app.use(session(sessConfig))
+app.use('/v1/product', productRoutes);
+app.use('/v1/slider', sliderRoutes);
+app.use('/v1/admin/consumer-form', formRoutes);
+app.use('/v1/cart', cartRoutes)
+app.use('/v1/order-processing', orderProcessingRoutes)
+app.use('/v1/auth', authRoutes)
 app.get('/', async (req, res) => {
     // event.emit('evEmitted', req.headers)
     res.send('mainpage')

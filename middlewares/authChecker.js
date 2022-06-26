@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const model = require('../auth/models/users').userSchema
 const jwtLib = require('jsonwebtoken')
 

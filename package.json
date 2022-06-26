@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "debug": "nodemon --inspect=0.0.0.0:9229 server.js",
     "test-dev": "jest --verbose --no-cache"
   },
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bs-logger": "^0.2.6",
     "cookie-parser": "^1.4.5",
@@ -42,7 +42,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "babel-cli": "^6.18.0",
     "babel-preset-env": "^1.7.0",
     "jest": "^26.6.3",
     "sequelize-cli": "^5.5.1",

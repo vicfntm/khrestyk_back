@@ -8,7 +8,7 @@ let productId
 let adminAuthToken
 let regularUserToken
 const {userSchema} = require('../../auth/models/users')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 describe('PRODUCTS CRUD', () => {
     beforeEach(() => {
