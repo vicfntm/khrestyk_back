@@ -1,31 +1,33 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
-const bodyParser = require('body-parser')
-require('dotenv').config({path: 'variables.env'})
-const productRoutes = require('./routes/productRoutes')
-const sliderRoutes = require('./routes/sliderRoutes')
-const formRoutes = require('./routes/consumerFormRoutes')
-const cartRoutes = require('./routes/cartRoutes')
-const adminRoutes = require('./routes/adminRoutes')
-const orderProcessingRoutes = require('./routes/orderProcessingRoutes')
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const bodyParser = require('body-parser');
+require('dotenv').config({path: 'variables.env'});
+const productRoutes = require('./routes/productRoutes');
+const sliderRoutes = require('./routes/sliderRoutes');
+const formRoutes = require('./routes/consumerFormRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const orderProcessingRoutes = require('./routes/orderProcessingRoutes');
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
-const swaggerDocument = YAML.load('./config/swagger.yaml')
+const swaggerDocument = YAML.load('./config/swagger.yaml');
+const amqp = require('amqplib/callback_api');
 require('multer')()
 // require('./loggers/winstonLogs')
 // require('winston')
 const winston = require('./loggers/logging')
 // const event = require('./server').event
 // require('./conn/mongooseConn')
-const authRoutes = require('./routes/authRoutes')
+const authRoutes = require('./routes/authRoutes');
 app.use(cors({origin: '*', credentials: true}));
-app.use(bodyParser.json())
-app.use(express.urlencoded({extended: true}))
+app.use(bodyParser.json());
+app.use(express.urlencoded({extended: true}));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static('./storage/public'));
 // const {setAsync, getAsync} = require('./conn/redisConn')
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const Redis = require("ioredis");
 // const session = require('express-session')
 app.use(cookieParser())
 // const sessConfig = require('./config/session.json')
@@ -33,9 +35,9 @@ app.use(cookieParser())
 app.use('/v1/product', productRoutes);
 app.use('/v1/slider', sliderRoutes);
 app.use('/v1/admin/consumer-form', formRoutes);
-app.use('/v1/cart', cartRoutes)
-app.use('/v1/order-processing', orderProcessingRoutes)
-app.use('/v1/auth', authRoutes)
+app.use('/v1/cart', cartRoutes);
+app.use('/v1/order-processing', orderProcessingRoutes);
+app.use('/v1/auth', authRoutes);
 app.get('/', async (req, res) => {
     // event.emit('evEmitted', req.headers)
     res.send('mainpage')
@@ -68,6 +70,37 @@ app.use(function (err, req, res, next) {
 
 const ent = app.listen(process.env.SERVER_PORT, () => {
     winston.info(`SERVER on port ${process.env.SERVER_PORT}`);
+});
+
+amqp.connect(`amqp://${process.env.RABBIT_LOGIN}:${process.env.RABBIT_PASSWORD}@${process.env.RABBIT_HOST}:${process.env.RABBIT_PORT}/auth_tokens`, async function(error0, connection) {
+    if (error0) {
+        throw error0;
+    }
+    connection.createChannel(async function(error1, channel) {
+        if (error1) {
+            throw error1;
+        }
+
+        var queue = 'tokens';
+
+        channel.assertQueue(queue, {
+            durable: false
+        });
+
+        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
+
+        channel.consume(queue, async function(msg) {
+            token =  msg.content.toString();
+            console.log(token);
+            tokenDecode = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+            console.log(tokenDecode)
+            const redis = new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST);
+            await redis.set(token, token)
+            await redis.expireat(token, tokenDecode.exp)
+        }, {
+            noAck: true
+        });
+    });
 });
 
 module.exports = ent

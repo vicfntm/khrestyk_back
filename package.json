@@ -8,6 +8,7 @@
     "test-dev": "jest --verbose --no-cache"
   },
   "dependencies": {
+    "amqplib": "^0.10.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bs-logger": "^0.2.6",
