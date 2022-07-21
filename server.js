@@ -45,7 +45,43 @@ app.get('/', async (req, res) => {
 app.use('/api/v1/order', adminRoutes);
 
 
-app.use(function (err, req, res, next) {
+// const event = require('events')
+// const emitter = new event()
+// emitter.on('evEmitted', (event) =>  {
+// })
+// module.exports.event = emitter
+// const {app} = require('./app')
+
+const ent = app.listen(process.env.SERVER_PORT, () => {
+    winston.info(`SERVER on port ${process.env.SERVER_PORT}`);
+});
+
+amqp.connect(`amqp://${process.env.RABBIT_LOGIN}:${process.env.RABBIT_PASSWORD}@${process.env.RABBIT_HOST}:${process.env.RABBIT_PORT}/auth_tokens`,  (connectEror, connection) => {
+    if (connectEror) {
+        throw connectEror;
+    }
+    connection.createChannel( (channelError, channel)=> {
+        if (channelError) {
+            throw channelError;
+        }
+        const queue = 'tokens';
+        channel.assertQueue(queue, {
+            durable: false
+        });
+        console.log(" [*] Rabbitmq waiting for messages in %s.", queue);
+        channel.consume(queue, async (msg) =>{
+            token =  msg.content.toString();
+            tokenDecode = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+            const redis = new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST);
+            await redis.set(token, token)
+            await redis.expireat(token, tokenDecode.exp)
+        }, {
+            noAck: true
+        });
+    });
+});
+
+app.use( (err, req, res, next) =>  {
     let status;
     switch (err.message) {
         case 'not permitted':
@@ -61,46 +97,5 @@ app.use(function (err, req, res, next) {
     }
     res.status(status).json({message: err.message})
 })
-// const event = require('events')
-// const emitter = new event()
-// emitter.on('evEmitted', (event) =>  {
-// })
-// module.exports.event = emitter
-// const {app} = require('./app')
-
-const ent = app.listen(process.env.SERVER_PORT, () => {
-    winston.info(`SERVER on port ${process.env.SERVER_PORT}`);
-});
-
-amqp.connect(`amqp://${process.env.RABBIT_LOGIN}:${process.env.RABBIT_PASSWORD}@${process.env.RABBIT_HOST}:${process.env.RABBIT_PORT}/auth_tokens`, async function(error0, connection) {
-    if (error0) {
-        throw error0;
-    }
-    connection.createChannel(async function(error1, channel) {
-        if (error1) {
-            throw error1;
-        }
-
-        var queue = 'tokens';
-
-        channel.assertQueue(queue, {
-            durable: false
-        });
-
-        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-
-        channel.consume(queue, async function(msg) {
-            token =  msg.content.toString();
-            console.log(token);
-            tokenDecode = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-            console.log(tokenDecode)
-            const redis = new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST);
-            await redis.set(token, token)
-            await redis.expireat(token, tokenDecode.exp)
-        }, {
-            noAck: true
-        });
-    });
-});
 
 module.exports = ent
