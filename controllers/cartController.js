@@ -53,4 +53,13 @@ module.exports = class cartController extends BaseController {
             return {message: this.messages.message.create.fail, data: null, code: this.notFound}
         }
    }
+
+   async delete(id){
+    try{
+         const res = await this.model.findByIdAndDelete(id);
+        return  {message: this.messages.message.delete.success, data: null, code: res ? this.ok : this.deleted}
+    }catch(err){
+        return {message: this.messages.message.delete.fail, data: null, code: this.serverError}
+    }
+   }
 }

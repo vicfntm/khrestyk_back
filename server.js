@@ -16,10 +16,10 @@ const amqp = require('amqplib/callback_api');
 require('multer')()
 // require('./loggers/winstonLogs')
 // require('winston')
-const winston = require('./loggers/logging')
+const winston = require('./loggers/logging');
 // const event = require('./server').event
 // require('./conn/mongooseConn')
-const authRoutes = require('./routes/authRoutes');
+// const authRoutes = require('./routes/authRoutes');
 app.use(cors({origin: '*', credentials: true}));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: true}));
@@ -37,10 +37,10 @@ app.use('/v1/slider', sliderRoutes);
 app.use('/v1/admin/consumer-form', formRoutes);
 app.use('/v1/cart', cartRoutes);
 app.use('/v1/order-processing', orderProcessingRoutes);
-app.use('/v1/auth', authRoutes);
+// app.use('/v1/auth', authRoutes);
 app.get('/', async (req, res) => {
     // event.emit('evEmitted', req.headers)
-    res.send('mainpage')
+    res.send('mainpage');
 })
 app.use('/api/v1/order', adminRoutes);
 

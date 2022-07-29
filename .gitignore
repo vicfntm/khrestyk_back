@@ -16,3 +16,4 @@ docker-compose.yml
 /frontend/
 /mongo/
 /images/
+/microservices/auth/
