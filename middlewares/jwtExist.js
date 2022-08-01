@@ -17,7 +17,6 @@ module.exports = async (req, res, next) => {
         const redis = new Redis(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
         tokenExist = await redis.get(token);
-        
         if( tokenExist === null){
             throw new Error(MESSAGE_NO_JWT);
         }

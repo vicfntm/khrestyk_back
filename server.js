@@ -35,7 +35,7 @@ app.use(cookieParser())
 app.use('/v1/product', productRoutes);
 app.use('/v1/slider', sliderRoutes);
 app.use('/v1/admin/consumer-form', formRoutes);
-app.use('/v1/cart', cartRoutes);
+app.use('/v1/cart', authMiddleware, cartRoutes);
 app.use('/v1/order-processing', orderProcessingRoutes);
 app.get('/', async (req, res) => {
     // event.emit('evEmitted', req.headers)
