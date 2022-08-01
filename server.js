@@ -19,7 +19,6 @@ require('multer')()
 const winston = require('./loggers/logging');
 // const event = require('./server').event
 // require('./conn/mongooseConn')
-// const authRoutes = require('./routes/authRoutes');
 app.use(cors({origin: '*', credentials: true}));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: true}));
@@ -28,6 +27,7 @@ app.use(express.static('./storage/public'));
 // const {setAsync, getAsync} = require('./conn/redisConn')
 const cookieParser = require('cookie-parser');
 const Redis = require("ioredis");
+const authMiddleware = require('./middlewares/jwtExist');
 // const session = require('express-session')
 app.use(cookieParser())
 // const sessConfig = require('./config/session.json')
@@ -37,12 +37,11 @@ app.use('/v1/slider', sliderRoutes);
 app.use('/v1/admin/consumer-form', formRoutes);
 app.use('/v1/cart', cartRoutes);
 app.use('/v1/order-processing', orderProcessingRoutes);
-// app.use('/v1/auth', authRoutes);
 app.get('/', async (req, res) => {
     // event.emit('evEmitted', req.headers)
     res.send('mainpage');
 })
-app.use('/api/v1/order', adminRoutes);
+app.use('/api/v1/order', authMiddleware, adminRoutes);
 
 
 // const event = require('events')
