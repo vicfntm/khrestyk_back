@@ -14,42 +14,29 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./config/swagger.yaml');
 const amqp = require('amqplib/callback_api');
 require('multer')();
-// require('./loggers/winstonLogs')
-// require('winston')
 const winston = require('./loggers/logging');
-// const event = require('./server').event
-// require('./conn/mongooseConn')
 app.use(cors({origin: '*', credentials: true}));
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: true}));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static('./storage/public'));
-// const {setAsync, getAsync} = require('./conn/redisConn')
 const cookieParser = require('cookie-parser');
 const Redis = require("ioredis");
 const authMiddleware = require('./middlewares/jwtExist');
-// const session = require('express-session')
 app.use(cookieParser())
-// const sessConfig = require('./config/session.json')
-// app.use(session(sessConfig))
 app.use('/v1/product', productRoutes);
 app.use('/v1/slider', sliderRoutes);
 app.use('/v1/admin/consumer-form', formRoutes);
 app.use('/v1/cart', cartRoutes);
 app.use('/v1/order-processing', orderProcessingRoutes);
-app.get('/', async (req, res) => {
-    // event.emit('evEmitted', req.headers)
-    res.send('mainpage');
-});
+
+app.use('/v1/admin/product', authMiddleware, productRoutes);
+app.use('/v1/admin/order-processing', authMiddleware, orderProcessingRoutes);
 app.use('/api/v1/order', authMiddleware, adminRoutes);
 
-
-// const event = require('events')
-// const emitter = new event()
-// emitter.on('evEmitted', (event) =>  {
-// })
-// module.exports.event = emitter
-// const {app} = require('./app')
+app.get('/', async (req, res) => {
+    res.send('mainpage');
+});
 
 const ent = app.listen(process.env.SERVER_PORT, () => {
     winston.info(`SERVER on port ${process.env.SERVER_PORT}`);
