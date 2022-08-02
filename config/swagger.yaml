@@ -9,7 +9,7 @@ info:
 #     version: 1.0.0
 servers:
     - url: http://localhost:8086/api/v1
-    - url: http://95.179.185.226:8086/api/v1
+    - url: 146.190.232.27:8089/api/v1
 paths:
     /product/all:
         get:
@@ -391,7 +391,7 @@ paths:
                     description: not found
                 '500':
                     description: помилка сервера
-    /auth/login:
+    /auth/jwt-policy/sign-in:
         post:
             description: отримання токену
             tags:
@@ -402,46 +402,53 @@ paths:
                         schema:
                             type: object
                             properties:
-                                login:
+                                username:
                                     type: string
                                 password:
                                     type: string
+                        example:
+                            username: 'John_Doe'
+                            password: 'xZGXhMNAKp3eTKuv'
             responses:
                 '200':
-                    description: ok
+                    description: успішно згенеровано
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SucсessAuth'
                 '500':
                     description: помилка сервера
-    /auth/create-user:
-        post:
-            description: "
-            створення юзера(користувача системи). \n
-            Метод використовується для додавання 'адмінів'. \n
-            звичайні покупці через цей метод не створюються. \n
-            Роль адміна окремо застосовується в мануальному режимі
-            "
-            tags:
-                - authentification
-            security:
-                - bearerAuth: []
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                login:
-                                    type: string
-                                password:
-                                    type: string
-            responses:
-                '200':
-                    description: ok
-                '401':
-                    description: токен відсутній
-                '403':
-                    description: у користувача недостатньо прав на виконання операції (потрібна роль role - admin), токен невалідний, або час життя вичерпано
-                '500':
-                    description: помилка сервера
+    # /auth/create-user:
+    #     post:
+    #         description: "
+    #         створення юзера(користувача системи). \n
+    #         Метод використовується для додавання 'адмінів'. \n
+    #         звичайні покупці через цей метод не створюються. \n
+    #         Роль адміна окремо застосовується в мануальному режимі
+    #         "
+    #         tags:
+    #             - authentification
+    #         security:
+    #             - bearerAuth: []
+    #         requestBody:
+    #             content:
+    #                 application/json:
+    #                     schema:
+    #                         type: object
+    #                         properties:
+    #                             login:
+    #                                 type: string
+    #                             password:
+    #                                 type: string
+    #         responses:
+    #             '200':
+    #                 description: ok
+    #             '401':
+    #                 description: токен відсутній
+    #             '403':
+    #                 description: у користувача недостатньо прав на виконання операції (потрібна роль role - admin), токен невалідний, або час життя вичерпано
+    #             '500':
+    #                 description: помилка сервера
 
 components:
     securitySchemes:
@@ -450,6 +457,11 @@ components:
             name: token
             in: header
     schemas:
+        SucсessAuth:
+            type: object
+            properties:
+                token:
+                    type: string
         Product:
             type: object
             properties:

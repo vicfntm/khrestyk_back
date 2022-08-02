@@ -9,11 +9,11 @@ const formRoutes = require('./routes/consumerFormRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const orderProcessingRoutes = require('./routes/orderProcessingRoutes');
-const swaggerUi = require('swagger-ui-express')
-const YAML = require('yamljs')
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./config/swagger.yaml');
 const amqp = require('amqplib/callback_api');
-require('multer')()
+require('multer')();
 // require('./loggers/winstonLogs')
 // require('winston')
 const winston = require('./loggers/logging');
