@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const productJson = require('../dummy/products.json');
 const ProductController = require('../controllers/productController');
 const product = new ProductController;
 const {catchErrors} = require('../errorHandlers/errHandler');
