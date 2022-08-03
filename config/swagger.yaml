@@ -558,6 +558,21 @@ paths:
                     description: неможливо обробити
                 '500':
                     description: server error
+    /cart/v1/cart-delete/{id}:
+        delete:
+          description: видалення усього замовлення
+          parameters:
+            - in: path
+              name: id
+          tags:
+                - shoppingCart
+          responses:
+                '200':
+                    description: успішно видалено
+                '404':
+                    description: не знайдено (при повторних запитах)
+                '500':
+                    description: server error
     /cart/all:
         parameters:
             - in: query

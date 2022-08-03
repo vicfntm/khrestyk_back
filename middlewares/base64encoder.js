@@ -11,7 +11,8 @@ const encoder = (req, res, next) => {
             if(elem.images.length > 0){
                 try{
                     elem.images.map((imageData, k) => {
-                        const convertedImage = base64Convertor(makeAbsolutePath(imageData.url));
+                        // const convertedImage = base64Convertor(makeAbsolutePath(imageData.url));
+                        const convertedImage = "temporary disabled base64 convertions";
                         if(convertedImage !== undefined){
                             imageData.image = convertedImage;
                         }

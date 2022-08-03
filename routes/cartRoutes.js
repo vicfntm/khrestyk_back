@@ -4,6 +4,8 @@ const router = express.Router();
 const cartHandler = new cartController();
 const {encodeImage} = require('../middlewares/base64encoder');
 const throttle = require('../middlewares/throttle');
+const authMiddleware = require('../middlewares/jwtExist');
+
 
 router.post('/add-product', throttle, encodeImage, async(req, res) => {
     const result = await cartHandler.store(req.body)
@@ -20,7 +22,7 @@ router.get('/show/:id', async(req, res) => {
     res.status(result.code).json(result)
 })
 
-router.delete('/cart-delete/:id', async(req, res) => {
+router.delete('/cart-delete/:id', authMiddleware, async(req, res) => {
     const result = await cartHandler.delete(req.params.id);
     res.status(result.code).json(result);
 })
