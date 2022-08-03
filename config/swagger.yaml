@@ -639,6 +639,17 @@ paths:
                     description: not found
                 '500':
                     description: помилка сервера
+    /v1/jwt-policy/token-exist:
+        get:
+            description: перевірка валідності токену
+            tags:
+                - authentification
+            parameters:
+                - in: header
+                  name: Authorization
+                  schema:
+                    type: string
+                  required: true
     /auth/jwt-policy/sign-in:
         post:
             description: отримання токену
