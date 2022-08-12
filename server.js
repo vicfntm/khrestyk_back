@@ -24,7 +24,7 @@ const cookieParser = require('cookie-parser');
 const Redis = require("ioredis");
 const authMiddleware = require('./middlewares/jwtExist');
 const authRoutes = require('./routes/authRoutes');
-app.use(cookieParser())
+app.use(cookieParser());
 app.use('/v1/product', productRoutes);
 app.use('/v1/slider', sliderRoutes);
 app.use('/v1/admin/consumer-form', formRoutes);

@@ -16,11 +16,11 @@ module.exports = class cartController extends BaseController {
             mailTarget = definer(payload.orderStatus, payload.userInfo.email)
         }
         if(payload.hasOwnProperty('id')){
-             const doc = await this.model.findOne({_id: payload.id})
-             const update = (await doc).overwrite({...payload, $inc: {__v: 1, _id: false}})
-             await update.save()
-            event(mailTarget, payload.orderStatus, {msg: `new order: ${update._id}`})
-            return {message: this.messages.message.edit.success, data: update, code: this.ok}
+             const doc = await this.model.findOne({_id: payload.id});
+             const update = (await doc).overwrite({...payload, $inc: {__v: 1, _id: false}});
+             await update.save();
+            event(mailTarget, payload.orderStatus, {msg: `new order: ${update._id}`});
+            return {message: this.messages.message.edit.success, data: update, code: this.ok};
         }
         try{
             cart = new this.model(payload)

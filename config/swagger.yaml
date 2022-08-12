@@ -558,7 +558,7 @@ paths:
                     description: неможливо обробити
                 '500':
                     description: server error
-    /cart/v1/cart-delete/{id}:
+    /cart/cart-delete/{id}:
         delete:
           description: видалення усього замовлення
           parameters:
@@ -721,6 +721,8 @@ components:
             properties:
                 token:
                     type: string
+                expired:
+                    type: integer
         Product:
             type: object
             properties:
