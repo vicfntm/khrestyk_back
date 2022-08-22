@@ -71,11 +71,16 @@ amqp.connect(`amqp://${process.env.RABBIT_LOGIN}:${process.env.RABBIT_PASSWORD}@
 
 app.use( (err, req, res, next) =>  {
     let status;
+    let messageobject = {};
     switch (err.message) {
         case 'not permitted':
         case  'invalid signature':
         case 'jwt expired':
+        case 'jwt must be provided':
+        case 'jwt has incorrect structure':
+        case 'jwt not exist':
             status = 403
+            messageobject.type = 'auth';
             break
         case 'jwt must be provided':
             status = 401
@@ -83,7 +88,8 @@ app.use( (err, req, res, next) =>  {
         default:
             status = 500
     }
-    res.status(status).json({message: err.message})
+    messageobject.message = err.message;
+    res.status(status).json(messageobject);
 })
 
 module.exports = ent
