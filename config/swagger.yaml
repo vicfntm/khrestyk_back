@@ -677,6 +677,23 @@ paths:
                                 $ref: '#/components/schemas/SucсessAuth'
                 '500':
                     description: помилка сервера
+    /mail/feedback-form:
+        post:
+            description: відправка повідомлення на пошту адміністратора
+            tags:
+                - Mailing
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Feedback'
+            responses:
+                '200':
+                    description: відправлено
+                '400':
+                    description: некоректні request параметри, проблеми при відправці
+                '500':
+                    description: помилка сервера
     # /auth/create-user:
     #     post:
     #         description: "
@@ -723,6 +740,20 @@ components:
                     type: string
                 expired:
                     type: integer
+        Feedback:
+            type: object
+            properties:
+                name:
+                    type: string
+                    required: true
+                phone:
+                    type: string
+                    required: true
+                message:
+                    type: string
+                    required: true
+                message_type:
+                    type: string
         Product:
             type: object
             properties:
